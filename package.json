@@ -1,0 +1,26 @@
+{
+  "name": "bicyclegearcalc",
+  "version": "0.0.1",
+  "description": "calculates bicycle magic gear combinations",
+  "main": "./src/main.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gschenk/bicycleGearCalc.git"
+  },
+  "author": "gerald schenk",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/gschenk/bicycleGearCalc/issues"
+  },
+  "homepage": "https://github.com/gschenk/bicycleGearCalc#readme",
+  "dependencies": {
+    "jest": "^25.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-google": "^0.14.0"
+  }
+}
