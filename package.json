@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/gschenk/bicycleGearCalc#readme",
   "dependencies": {
+    "deep-freeze": "0.0.1",
     "jest": "^25.1.0",
     "js-yaml": "^3.13.1"
   },

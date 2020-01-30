@@ -1,4 +1,5 @@
 // identify units and convert them into SI base units and rad
+const deepFreeze = require('deep-freeze');
 const constants = require('./constants');
 
 const values = {
@@ -54,6 +55,7 @@ const values = {
     mrad: 1e3,
   },
 };
+deepFreeze(values);
 
 const translation = {
   length: {
@@ -78,6 +80,7 @@ const translation = {
     mil: 'mrad',
   },
 };
+deepFreeze(translation);
 
 
 // there is no unambiguous meaning for these unit symbols
