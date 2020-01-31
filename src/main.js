@@ -1,6 +1,14 @@
 const Config = require('./config');
 const defaults = require('./defaults');
 const tools = require('./tools');
+const units = require('./units');
+const input = require('./input');
+
+const inputObject = input.readFile('example.yaml')
+console.log(
+  inputObject,
+  input.parseAndConvert(units, inputObject),
+);
 
 const config = new Config(
   process.argv,
