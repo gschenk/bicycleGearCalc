@@ -1,11 +1,8 @@
-// reads yaml input file
-const yaml = require('js-yaml');
-const fs = require('fs');
+// comprehends input
 const tools = require('./tools');
 
 const pwitch = tools.pureSwitch;
 
-// tools.pureSwitch()
 
 // in: dicitionary symbol to value
 // in: dictiionary symbol translations
@@ -18,18 +15,6 @@ const unitConversion = dict => valUnit => {
   return factor && value ? factor * value : NaN;
 };
 
-// non-pure
-function readFile(inFilePath) {
-  // mutable binding to get variable before try scope
-  let YmlDoc = {};
-  // safeLoad from js-yaml loads one document per yaml file
-  try {
-    YmlDoc = yaml.safeLoad(fs.readFileSync(inFilePath, 'utf8'));
-  } catch (e) {
-    console.log(e);
-  }
-  return YmlDoc;
-}
 
 // validate :: Obj -> Bool
 function validate(input) {
@@ -46,4 +31,4 @@ function parseAndConvert(units, input) {
 }
 
 
-module.exports = {readFile, parseAndConvert};
+module.exports = {parseAndConvert};
