@@ -87,6 +87,18 @@ const angle = {
 };
 deepFreeze(angle);
 
+const number = {
+  values: {},
+  translations: {},
+};
+deepFreeze(number);
+
+const text = {
+  values: {},
+  translations: {},
+};
+deepFreeze(text);
+
 
 // there is no unambiguous meaning for these unit symbols
 const ambiguous = ['Mi', 'Oz', 'gr', 'mi', 'M'];

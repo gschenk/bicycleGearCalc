@@ -1,7 +1,7 @@
 # component: property: type
 # types are: boolean, number, text, angle, length, mass, force
 bottom bracket:
-    width: number
+    width: length
 chain:
     elongation: number
     pitch: length

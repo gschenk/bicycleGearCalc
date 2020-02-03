@@ -6,6 +6,10 @@ const defaultCfg = {
   file: './example.yaml',
   verbose: false,
   help: false,
+  templates: {
+    input: './templates/input.complete.yml',
+    inputDefaults: './templates/input.defaults.yml',
+  },
 };
 
 // argument flags are mapped to these

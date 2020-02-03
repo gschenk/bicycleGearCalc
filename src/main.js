@@ -5,13 +5,6 @@ const units = require('./units');
 const read = require('./read');
 const input = require('./input');
 
-const inputObject = read.readFile('./example.yaml');
-
-console.log(
-  inputObject,
-  input.parseAndConvert(units, inputObject),
-);
-
 const config = new Config(
   process.argv,
   defaults.defaultCfg,
@@ -19,6 +12,15 @@ const config = new Config(
   defaults.configForArg,
 );
 Object.freeze(config);
+
+const inputObject = read.readFile(config.templates.inputDefaults);
+const inputTemplate = read.readFile(config.templates.input);
+
+console.log(
+//  inputObject,
+//  inputTemplate,
+  input.parseAndConvert(units, inputTemplate, inputObject),
+);
 
 
 if (config.err !== 0) {
