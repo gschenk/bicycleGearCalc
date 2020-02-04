@@ -36,6 +36,40 @@ const mapToAllKeys = o => f => Object.keys(o).map(
   k => Object.keys(o[k]).map(l => f(k, l)),
 );
 
+const arrayOfObjects = {
+  // toObjectsArray :: String s => {s: {s: a}} -> [{s: s, s: s, s: a}]
+  toObjectsArray: o => mapToAllKeys(o)(
+    (k, l) => ({topKey: k, deepKey: l, value: o[k][l]}),
+  ).flat(),
+
+  // filterByKey:: String s =>  s -> [{s: a}] -> a -> [{s: a}]
+  filterByKey: k => os => a => os.filter(o => o[k] === a),
+
+  // uniqueValuesForKey String s => s -> [{s: a}] -> [a]
+  uniqueValuesForKey: k => os => os.map(o => o[k]).reduce(
+    (as, a) => as.includes(a) ? as : [...as, a],
+    [],
+  ),
+
+  // inverse of toObjectsArray
+  // toNestedObject String s => [{s: s, s: s, s: a}] -> { s: {s: a} }
+  toNestedObject(os) {
+    const filterByTopKey = this.filterByKey('topKey')(os);
+    const topKeys = this.uniqueValuesForKey('topKey')(os);
+    const nestedByTopKey = topKeys.map(filterByTopKey);
+    const innerObjects = nestedByTopKey.map(as => Object.assign(
+      {},
+      ...as.map(o => ({[o.deepKey]: o.value})),
+    ));
+
+    // zipper :: String -> a -> { s: a }
+    const zipper = (k, a) => ({[k]: a});
+
+    const nestedObjects = tools.zipWith(zipper)(topKeys)(innerObjects);
+    return Object.assign({}, ...nestedObjects);
+  },
+};
+
 // validate :: Obj -> Bool
 function validate() {
   return true; // stub
