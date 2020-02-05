@@ -18,29 +18,12 @@ const unitConversion = dict => valUnit => {
 };
 
 
-// takes units object, a function to return for units,
-// and a token
-// curry with units object, if token is included in its keys
-// it returns the unit function curried with units[token],
-// if not it returns an identity function
-//
-// pointUnitOther :: Object -> Function -> String -> Function
-const pointUnitOther = unitDict => unitFunction => token => {
-  const isUnit = Object.keys(unitDict).includes(token);
-  // const isOther = ['boolean', 'number', 'text'].includes(token);
-  return isUnit ? unitFunction(unitDict[token]) : (a => a);
-};
-
-// mapToAllKeys :: String s => {s: {s: a}}-> ( a -> b ) -> [[( a -> b )]]
-const mapToAllKeys = o => f => Object.keys(o).map(
-  k => Object.keys(o[k]).map(l => f(k, l)),
-);
-
+// this is probably obsolete now
 const arrayOfObjects = {
-  // toObjectsArray :: String s => {s: {s: a}} -> [{s: s, s: s, s: a}]
-  toObjectsArray: o => mapToAllKeys(o)(
-    (k, l) => ({topKey: k, deepKey: l, value: o[k][l]}),
-  ).flat(),
+  // mapToAllKeys :: String s => {s: {s: a}}-> ( a -> b ) -> [[( a -> b )]]
+  mapToAllKeys: o => f => Object.keys(o).map(
+    k => Object.keys(o[k]).map(l => f(k, l)),
+  ),
 
   // filterByKey:: String s =>  s -> [{s: a}] -> a -> [{s: a}]
   filterByKey: k => os => a => os.filter(o => o[k] === a),
@@ -51,11 +34,18 @@ const arrayOfObjects = {
     [],
   ),
 
+  // toObjectsArray :: String s => {s: {s: a}} -> [{s: s, s: s, s: a}]
+  toObjectsArray(object) {
+    return this.mapToAllKeys(object)(
+      (k, l) => ({topKey: k, deepKey: l, value: object[k][l]}),
+    ).flat();
+  },
+
   // inverse of toObjectsArray
   // toNestedObject String s => [{s: s, s: s, s: a}] -> { s: {s: a} }
-  toNestedObject(os) {
-    const filterByTopKey = this.filterByKey('topKey')(os);
-    const topKeys = this.uniqueValuesForKey('topKey')(os);
+  toNestedObject(objects) {
+    const filterByTopKey = this.filterByKey('topKey')(objects);
+    const topKeys = this.uniqueValuesForKey('topKey')(objects);
     const nestedByTopKey = topKeys.map(filterByTopKey);
     const innerObjects = nestedByTopKey.map(as => Object.assign(
       {},
@@ -70,21 +60,28 @@ const arrayOfObjects = {
   },
 };
 
-// validate :: Obj -> Bool
-function validate() {
-  return true; // stub
+
+class Input {
+  constructor(template, units, data) {
+    const knownUnits = Object.keys(units);
+    const convert = token => unitConversion(units[token]);
+    const outerKeys = Object.keys(template)
+      .filter(o => Object.keys(data).includes(o));
+
+    outerKeys.map(k => {
+      const innerKeys = Object.keys(template[k])
+        .filter(o => Object.keys(data[k]).includes(o));
+      innerKeys.map(l => {
+        const token = template[k][l];
+        const isUnit = knownUnits.includes(token);
+        const value = isUnit ? convert(token)(data[k][l]) : data[k][l];
+        this[k] = {[l]: value};
+        return null;
+      });
+      return null;
+    });
+    Object.seal(this);
+  }
 }
 
-// parseAndConvert :: Obj -> Obj
-function parseAndConvert(units, template, input) {
-  // mapAllInputKeys :: ( a -> b ) -> [[( a -> b )]]
-  const mapAllInputKeys = mapToAllKeys(input);
-
-  // convert :: String -> String -> ( String -> Number )
-  const convert = (a, b) => pointUnitOther(units)(unitConversion)(template[a][b]);
-
-  return mapAllInputKeys((a, b) => convert(a, b)(input[a][b]));
-}
-
-
-module.exports = {validate, parseAndConvert};
+module.exports = Input;

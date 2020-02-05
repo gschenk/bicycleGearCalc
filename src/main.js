@@ -3,7 +3,8 @@ const defaults = require('./defaults');
 const tools = require('./tools');
 const units = require('./units');
 const read = require('./read');
-const input = require('./input');
+const Input = require('./input');
+
 
 const config = new Config(
   process.argv,
@@ -13,13 +14,22 @@ const config = new Config(
 );
 Object.freeze(config);
 
-const inputObject = read.readFile(config.templates.inputDefaults);
-const inputTemplate = read.readFile(config.templates.input);
+
+// closure on Data constructor
+function InData(dataObject) {
+  return new Input(
+    read.readFile(config.templates.input),
+    units,
+    dataObject,
+  );
+}
+
+const inData = new InData(
+  read.readFile(config.templates.inputDefaults),
+);
 
 console.log(
-//  inputObject,
-//  inputTemplate,
-  input.parseAndConvert(units, inputTemplate, inputObject),
+  inData,
 );
 
 
