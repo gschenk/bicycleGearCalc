@@ -17,21 +17,52 @@ const unitConversion = dict => valUnit => {
   return factor && value ? factor * value : NaN;
 };
 
+// returns unique keys all objects passed to it have amongst each other
+const combinedUniqeKeys = (...os) => [...os.map(o => Object.keys(o))]
+  .flat()
+  .filter((k, i, ks) => ks.indexOf(k) === i);
 
+const validKeys = (...os) => (...ps) => combinedUniqeKeys(...os)
+  .filter(o => combinedUniqeKeys(...ps).includes(o));
+
+
+// creates objects holding input data
+// the data is structured as the `template` which also
+// sets the physical properties. Data from `data` are
+// converted following rules set out in `units`. If no
+// conversion rules are present for the physical type
+// the data value is returned unchanged.
+// For missing data `defaults` may be filled in.
+//
+// The output is an object with nested data where all physical values
+// are converted to SI units. And that only contains attributes that
+// are in `template` as well as in either `data` or `deftauls` objects.
 class Input {
-  constructor(template, units, data) {
+  // constructor : Object a, Object b, Object c: a -> b -> b -> b -> c
+  constructor(units, template, defaults, data) {
     const knownUnits = Object.keys(units);
     const convert = token => unitConversion(units[token]);
-    const outerKeys = Object.keys(template)
-      .filter(o => Object.keys(data).includes(o));
+
+    // all keys that are in the template and for which data or default
+    // data are present.
+    const outerKeys = validKeys(template)(data, defaults);
 
     outerKeys.map(k => {
-      const innerKeys = Object.keys(template[k])
-        .filter(o => Object.keys(data[k]).includes(o));
+      // The lot of ternary operators are there to ensure that there is always
+      // a data object even if the higher level key is missing in `data`
+      const innerData = data[k] ? data[k] : defaults[k];
+      const innerKeys = validKeys(template[k])(innerData, defaults[k]);
+      console.log(innerData);
       innerKeys.map(l => {
+        console.log(l);
         const token = template[k][l];
         const isUnit = knownUnits.includes(token);
-        const value = isUnit ? convert(token)(data[k][l]) : data[k][l];
+        const rawValue = innerData[l] ? innerData[l] : defaults[k][l];
+        const value = isUnit ? convert(token)(rawValue) : rawValue;
+
+        // here's the actual property asignment in this constructor
+        // this may be controversial, confer:
+        // https://stackoverflow.com/q/60048450/3842889
         this[k] = {[l]: value};
         return null;
       });

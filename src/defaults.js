@@ -3,13 +3,13 @@
 const defaultCfg = {
   err: 0,
   stdin: false,
-  file: './example.yaml',
   verbose: false,
   help: false,
   templates: {
     input: './templates/input.complete.yml',
     inputDefaults: './templates/input.defaults.yml',
   },
+  file: '',
 };
 
 // argument flags are mapped to these

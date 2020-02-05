@@ -14,18 +14,20 @@ const config = new Config(
 );
 Object.freeze(config);
 
+console.log(config);
 
 // closure on Data constructor
 function InData(dataObject) {
   return new Input(
-    read.readFile(config.templates.input),
     units,
+    read.readFile(config.templates.input),
+    read.readFile(config.templates.inputDefaults),
     dataObject,
   );
 }
 
 const inData = new InData(
-  read.readFile(config.templates.inputDefaults),
+  read.readFile(config.file),
 );
 
 console.log(
