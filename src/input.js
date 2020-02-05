@@ -18,49 +18,6 @@ const unitConversion = dict => valUnit => {
 };
 
 
-// this is probably obsolete now
-const arrayOfObjects = {
-  // mapToAllKeys :: String s => {s: {s: a}}-> ( a -> b ) -> [[( a -> b )]]
-  mapToAllKeys: o => f => Object.keys(o).map(
-    k => Object.keys(o[k]).map(l => f(k, l)),
-  ),
-
-  // filterByKey:: String s =>  s -> [{s: a}] -> a -> [{s: a}]
-  filterByKey: k => os => a => os.filter(o => o[k] === a),
-
-  // uniqueValuesForKey String s => s -> [{s: a}] -> [a]
-  uniqueValuesForKey: k => os => os.map(o => o[k]).reduce(
-    (as, a) => as.includes(a) ? as : [...as, a],
-    [],
-  ),
-
-  // toObjectsArray :: String s => {s: {s: a}} -> [{s: s, s: s, s: a}]
-  toObjectsArray(object) {
-    return this.mapToAllKeys(object)(
-      (k, l) => ({topKey: k, deepKey: l, value: object[k][l]}),
-    ).flat();
-  },
-
-  // inverse of toObjectsArray
-  // toNestedObject String s => [{s: s, s: s, s: a}] -> { s: {s: a} }
-  toNestedObject(objects) {
-    const filterByTopKey = this.filterByKey('topKey')(objects);
-    const topKeys = this.uniqueValuesForKey('topKey')(objects);
-    const nestedByTopKey = topKeys.map(filterByTopKey);
-    const innerObjects = nestedByTopKey.map(as => Object.assign(
-      {},
-      ...as.map(o => ({[o.deepKey]: o.value})),
-    ));
-
-    // zipper :: String -> a -> { s: a }
-    const zipper = (k, a) => ({[k]: a});
-
-    const nestedObjects = tools.zipWith(zipper)(topKeys)(innerObjects);
-    return Object.assign({}, ...nestedObjects);
-  },
-};
-
-
 class Input {
   constructor(template, units, data) {
     const knownUnits = Object.keys(units);
