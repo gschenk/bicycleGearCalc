@@ -48,7 +48,6 @@ class Input {
 
     // all keys that are in the template and for which data or default
     // data are present.
-    console.log('foo:', Object.keys(data), Object.keys(defaults));
     const outerKeys = validKeys(template)(data, defaults);
 
     outerKeys.map(k => {
