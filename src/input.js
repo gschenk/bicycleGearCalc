@@ -48,13 +48,15 @@ class Input {
 
     // all keys that are in the template and for which data or default
     // data are present.
+    console.log('foo:', Object.keys(data), Object.keys(defaults));
     const outerKeys = validKeys(template)(data, defaults);
 
     outerKeys.map(k => {
       // The lot of ternary operators are there to ensure that there is always
       // a data object even if the higher level key is missing in `data`
-      const innerData = data[k] ? data[k] : defaults[k];
-      const innerKeys = validKeys(template[k])(innerData, defaults[k]);
+      const innerDefault = defaults[k] ? defaults[k] : {};
+      const innerData = data[k] ? data[k] : innerDefault;
+      const innerKeys = validKeys(template[k])(innerData, innerDefault);
 
       const result = innerKeys.map(l => {
         const token = template[k][l];
