@@ -16,3 +16,5 @@ rules:
   object-curly-spacing: [error, never]
   no-console: off
   max-len: [warn, {code: 80}]
+  no-nested-ternary: off
+  indent: [error, 2, ignoredNodes: [ConditionalExpression]]

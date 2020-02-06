@@ -1,6 +1,10 @@
 const Config = require('./config');
 const defaults = require('./defaults');
 const tools = require('./tools');
+const units = require('./units');
+const read = require('./read');
+const Input = require('./input');
+
 
 const config = new Config(
   process.argv,
@@ -9,6 +13,26 @@ const config = new Config(
   defaults.configForArg,
 );
 Object.freeze(config);
+
+console.log(config);
+
+// closure on Data constructor
+function InData(dataObject) {
+  return new Input(
+    units,
+    read.readFile(config.templates.input),
+    read.readFile(config.templates.inputDefaults),
+    dataObject,
+  );
+}
+
+const inData = new InData(
+  read.readFile(config.file),
+);
+
+console.log(
+  inData,
+);
 
 
 if (config.err !== 0) {

@@ -83,28 +83,26 @@ const consolidateReturn = (parts, defaults) => {
 
 
 // args.getConfig :: String s => [s] -> {s: a} -> {s: s} -> {s: a} -> {s: a}
-class Config {
-  constructor(fullArgs, defaultResults, knownCliArguments, goodCases) {
-    const args = fullArgs.slice(2);
-    Object.freeze(args);
+function Config(fullArgs, defaultResults, knownCliArguments, goodCases) {
+  const args = fullArgs.slice(2);
+  Object.freeze(args);
 
-    // apply all tests in validityTests object on args
-    const tests = validity.tests(2, knownCliArguments);
-    const testsKeys = Object.keys(tests);
-    const testsResults = testsKeys.map(a => tests[a](args));
+  // apply all tests in validityTests object on args
+  const tests = validity.tests(2, knownCliArguments);
+  const testsKeys = Object.keys(tests);
+  const testsResults = testsKeys.map(a => tests[a](args));
 
-    const badReturn = makeBadReturn(testsKeys,
-      testsResults,
-      validity.errorCases);
+  const badReturn = makeBadReturn(testsKeys,
+    testsResults,
+    validity.errorCases);
 
-    const goodReturn = makeGoodReturn(knownCliArguments, goodCases);
+  const goodReturn = makeGoodReturn(knownCliArguments, goodCases);
 
-    const preResults = testsResults.every(a => a)
-      ? goodReturn(args)
-      : badReturn(args);
+  const preResults = testsResults.every(a => a)
+    ? goodReturn(args)
+    : badReturn(args);
 
-    return consolidateReturn(preResults, defaultResults);
-  }
+  return consolidateReturn(preResults, defaultResults);
 }
 
 module.exports = Config;

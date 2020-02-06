@@ -1,0 +1,23 @@
+# component: property: type
+# types are: boolean, number, text, angle, length, mass, force
+bottom bracket:
+    width: length
+chain:
+    elongation: number
+    pitch: length
+    roller diametre: length
+chainring:
+    teeth: number
+    chainline: length
+chainstay:
+    length: length
+cog:
+    teeth: number
+    chainline: length
+drivetrain:
+    length: length
+dropouts:
+    distance: length
+tyre:
+    bead diametre: length
+    width: length

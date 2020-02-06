@@ -1,0 +1,21 @@
+# component: property: value
+# type of value defined in input.complete.yml
+bottom bracket:
+    width: 67 mm
+chain:
+    elongation: 0.01
+    pitch: 0.5 in
+    roller diametre: 7.75 mm
+chainring:
+    teeth: 44
+    chainline: 43.5 mm
+chainstay:
+    length: 405 mm
+cog:
+    teeth: 16
+    chainline: 43.5 mm
+dropouts:
+    distance: 130 mm
+tyre:
+    bead diametre: 622 mm
+    width: 28 mm

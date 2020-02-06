@@ -1,0 +1,4 @@
+# the entries here are a subset of the entries in input.complete.yml
+# what is included here is mandatory input
+chainring:
+    - teeth
