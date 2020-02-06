@@ -19,3 +19,5 @@ dropouts:
 tyre:
     bead diametre: 622 mm
     width: 28 mm
+drivetrain:
+    length: 400 mm

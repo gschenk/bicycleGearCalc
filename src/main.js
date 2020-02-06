@@ -4,6 +4,7 @@ const tools = require('./tools');
 const units = require('./units');
 const read = require('./read');
 const Input = require('./input');
+const Calc = require('./calc');
 
 
 const config = new Config(
@@ -54,3 +55,36 @@ if (config.help) {
     'where .yaml and .yml denote any input file, including path, with that end.',
   );
 }
+
+// showInUnits:: Object -> String -> Integer -> Number -> String
+const showInUnits = unitDict => unitToken => decimals => (...values) => {
+  const converteds = values.map(x => (x / unitDict[unitToken])
+    .toFixed(decimals));
+  return converteds.map(x => `${x} ${unitToken}`).join(', ');
+};
+
+const show = {
+  // mmString Number -> String
+  mm: showInUnits(units.length.values)('mm')(1),
+  deg: showInUnits(units.angle.values)('deg')(1),
+};
+
+const calc = new Calc(inData.chain.pitch);
+
+// const rChainring = calc.sprocketRadius(inData.chain.pitch)(inData.chainring.teeth);
+// const rCog = calc.sprocketRadius(inData.chain.pitch)(inData.cog.teeth);
+// const lFreeChain = calc.upFreeChainLength(rChainring, rCog, inData.drivetrain.length);
+// const aJoin = calc.chainJoinAngle(rChainring, rCog, inData.drivetrain.length);
+const lChain = calc.naiveChainLength(inData.chainring.teeth, inData.cog.teeth, inData.drivetrain.length);
+const nChain = calc.chainLengthToN(lChain);
+const lRestChain = calc.chainLengthRest(lChain);
+
+// provisional output
+const outputString = `
+The bike's drivetrain is ${show.mm(inData.drivetrain.length)} long.
+For chainring and cog with ${inData.chainring.teeth} and ${inData.cog.teeth} teeth, respectively,
+the minimum chain length is ${show.mm(lChain)}. That corresponds to ${nChain} links
+with a ${show.mm(lRestChain)} rest.
+`;
+
+console.log(outputString);
