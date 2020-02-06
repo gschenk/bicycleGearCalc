@@ -23,7 +23,7 @@ const combinedUniqeKeys = (...os) => [...os.map(o => Object.keys(o))]
   .filter((k, i, ks) => ks.indexOf(k) === i);
 
 // validKeys :: Objects -> Object -> [String]
-const validKeys = (...os) => (...ps) => tools.sorter(
+const validKeys = (...os) => (...ps) => tools.reduceSort(
   combinedUniqeKeys(...os)
     .filter(o => combinedUniqeKeys(...ps).includes(o)),
 );
@@ -68,9 +68,10 @@ class Input {
         return {[l]: value};
       });
       this[k] = result.reduce((os, o) => ({...os, ...o}), {});
+      Object.freeze(this[k]);
       return null;
     });
-    Object.seal(this);
+    Object.freeze(this);
   }
 }
 

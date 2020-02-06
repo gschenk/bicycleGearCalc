@@ -3,14 +3,16 @@
 const zipWith = f => xs => ys => xs.map((n, i) => f(n, ys[i]));
 
 // pure sorting algorith from https://stackoverflow.com/a/60085033/3842889
-const sorter = as => as.reduce(
+// Ordered o => [o] -> [o]
+const reduceSort = as => as.reduce(
   (xs, x) => x >= xs.slice(-1)[0]
     ? [...xs, x]
     : (xs[0] < x
-    ? sorter([x, ...xs])
+    ? reduceSort([x, ...xs])
     : [x, ...xs]),
   [],
 );
+// Note that V8, and hence node doesn't support tail-call optimization.
 
 const tools = {
 // this is a convenient replacement for switch
@@ -39,7 +41,7 @@ const tools = {
     return uniqeMatch ? cases[key] : defCase;
   },
 
-  sorter,
+  reduceSort,
 
   zipWith,
 };
