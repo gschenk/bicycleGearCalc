@@ -2,6 +2,16 @@
 // zipWith :: ( a -> b -> c ) -> [a] -> [b] -> [c]
 const zipWith = f => xs => ys => xs.map((n, i) => f(n, ys[i]));
 
+// pure sorting algorith from https://stackoverflow.com/a/60085033/3842889
+const sorter = as => as.reduce(
+  (xs, x) => x >= xs.slice(-1)[0]
+    ? [...xs, x]
+    : (xs[0] < x
+    ? sorter([x, ...xs])
+    : [x, ...xs]),
+  [],
+);
+
 const tools = {
 // this is a convenient replacement for switch
   // pureSwitch :: String a => { a: b } -> b -> a -> b
@@ -28,6 +38,8 @@ const tools = {
     const uniqeMatch = match.filter(a => (a)).length === 1;
     return uniqeMatch ? cases[key] : defCase;
   },
+
+  sorter,
 
   zipWith,
 };

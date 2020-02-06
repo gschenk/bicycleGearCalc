@@ -22,8 +22,11 @@ const combinedUniqeKeys = (...os) => [...os.map(o => Object.keys(o))]
   .flat()
   .filter((k, i, ks) => ks.indexOf(k) === i);
 
-const validKeys = (...os) => (...ps) => combinedUniqeKeys(...os)
-  .filter(o => combinedUniqeKeys(...ps).includes(o));
+// validKeys :: Objects -> Object -> [String]
+const validKeys = (...os) => (...ps) => tools.sorter(
+  combinedUniqeKeys(...os)
+    .filter(o => combinedUniqeKeys(...ps).includes(o)),
+);
 
 
 // creates objects holding input data
@@ -52,9 +55,8 @@ class Input {
       // a data object even if the higher level key is missing in `data`
       const innerData = data[k] ? data[k] : defaults[k];
       const innerKeys = validKeys(template[k])(innerData, defaults[k]);
-      console.log(innerData);
-      innerKeys.map(l => {
-        console.log(l);
+
+      const result = innerKeys.map(l => {
         const token = template[k][l];
         const isUnit = knownUnits.includes(token);
         const rawValue = innerData[l] ? innerData[l] : defaults[k][l];
@@ -63,9 +65,9 @@ class Input {
         // here's the actual property asignment in this constructor
         // this may be controversial, confer:
         // https://stackoverflow.com/q/60048450/3842889
-        this[k] = {[l]: value};
-        return null;
+        return {[l]: value};
       });
+      this[k] = result.reduce((os, o) => ({...os, ...o}), {});
       return null;
     });
     Object.seal(this);
