@@ -23,7 +23,7 @@ const combinedUniqeKeys = (...os) => [...os.map(o => Object.keys(o))]
   .filter((k, i, ks) => ks.indexOf(k) === i);
 
 // validKeys :: Objects -> Object -> [String]
-const validKeys = (...os) => (...ps) => tools.sorter(
+const validKeys = (...os) => (...ps) => tools.reduceSort(
   combinedUniqeKeys(...os)
     .filter(o => combinedUniqeKeys(...ps).includes(o)),
 );
@@ -53,8 +53,9 @@ class Input {
     outerKeys.map(k => {
       // The lot of ternary operators are there to ensure that there is always
       // a data object even if the higher level key is missing in `data`
-      const innerData = data[k] ? data[k] : defaults[k];
-      const innerKeys = validKeys(template[k])(innerData, defaults[k]);
+      const innerDefault = defaults[k] ? defaults[k] : {};
+      const innerData = data[k] ? data[k] : innerDefault;
+      const innerKeys = validKeys(template[k])(innerData, innerDefault);
 
       const result = innerKeys.map(l => {
         const token = template[k][l];
@@ -68,9 +69,10 @@ class Input {
         return {[l]: value};
       });
       this[k] = result.reduce((os, o) => ({...os, ...o}), {});
+      Object.freeze(this[k]);
       return null;
     });
-    Object.seal(this);
+    Object.freeze(this);
   }
 }
 

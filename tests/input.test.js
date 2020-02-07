@@ -5,12 +5,14 @@ const template = {
   b: {u: 'text', 1: 'length'},
   c: {334: 'length', 'a 1': 'bool'},
   d: {a: 'length', b: 'bool'},
+  e: {n: 'number', m: 'length'},
 };
 
 const data = {
   a: {a: '0.5 xyz', 'a 1': true},
   b: {u: 'bli bla', 1: ''},
   c: {334: '0.5324 xxx', nonono: '1 xyz'},
+  e: {n: 1, m: '2 xyz'},
 };
 const badKey = 'nonono'; // this key from input should be filtered out
 
@@ -38,6 +40,7 @@ describe('Unit class testing:', () => {
       b: {1: 6, u: 'bli bla'},
       c: {334: NaN},
       d: {a: 3},
+      e: {m: 6, n: 1},
     };
     expect(JSON.stringify(dataObject)).toBe(JSON.stringify(expected));
   });

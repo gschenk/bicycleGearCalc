@@ -3,7 +3,7 @@
 bottom bracket:
     width: 67 mm
 chain:
-    elongation: 0.01
+    elongation: 0.001
     pitch: 0.5 in
     roller diametre: 7.75 mm
 chainring:
@@ -19,3 +19,5 @@ dropouts:
 tyre:
     bead diametre: 622 mm
     width: 28 mm
+drivetrain:
+    length: 400 mm

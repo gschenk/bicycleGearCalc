@@ -82,8 +82,17 @@ const consolidateReturn = (parts, defaults) => {
 };
 
 
+// Takes CLI arguments (argv) and checks them against a dictionary of
+// known parameters `knownCliArguments`. Objects from `argumentReturn`
+// matching to the CLI arguments found are collated into the returned object.
+// Default arguments may be returned otherwise, they are provided in
+// `defaultReturn`.
+// In case of errors there are no exceptions thrown but error objects returned.
+// These may be acted upon at the place of call of this function.
+// *This function is pure.*
 // args.getConfig :: String s => [s] -> {s: a} -> {s: s} -> {s: a} -> {s: a}
-function Config(fullArgs, defaultResults, knownCliArguments, goodCases) {
+function Config(fullArgs, defaultReturn, knownCliArguments, argumentReturns) {
+  // the first two elements, node binary and source path, are not needed
   const args = fullArgs.slice(2);
   Object.freeze(args);
 
@@ -96,13 +105,13 @@ function Config(fullArgs, defaultResults, knownCliArguments, goodCases) {
     testsResults,
     validity.errorCases);
 
-  const goodReturn = makeGoodReturn(knownCliArguments, goodCases);
+  const goodReturn = makeGoodReturn(knownCliArguments, argumentReturns);
 
-  const preResults = testsResults.every(a => a)
+  const preReturn = testsResults.every(a => a)
     ? goodReturn(args)
     : badReturn(args);
 
-  return consolidateReturn(preResults, defaultResults);
+  return consolidateReturn(preReturn, defaultReturn);
 }
 
 module.exports = Config;

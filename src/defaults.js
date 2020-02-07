@@ -9,7 +9,7 @@ const defaultCfg = {
     input: './templates/input.complete.yml',
     inputDefaults: './templates/input.defaults.yml',
   },
-  file: '',
+  file: './templates/input.defaults.yml',
 };
 
 // argument flags are mapped to these

@@ -15,7 +15,7 @@ const length = {
     km: 1e3,
     Mm: 1e6,
     Gm: 1e9,
-    in: 0.254,
+    in: 0.0254,
     thou: 0.254e-3,
     s: constants.c, // light seconds
     NM: 1852, // mile
