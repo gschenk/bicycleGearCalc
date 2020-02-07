@@ -33,9 +33,14 @@ const naiveChainLength = lPitch => (nChainring, nCog, lDrivetrain) => {
   return lChainring + lCog + (2 * lFreeChain);
 };
 
-const chainLengthToN = lPitch => lChain => Math.floor(lChain / lPitch);
+// even number of links in a chain that is greater than a given length
+const chainLengthToN = lPitch => lChain => 2 * Math.ceil(lChain / (2 * lPitch));
 
-const chainLengthRest = lPitch => lChain => (lChain % lPitch);
+// rest length chain is longer than minimum
+const chainLengthRest = lPitch => lChain => 2 * lPitch - (lChain % (2 * lPitch));
+
+// rest in units of links
+const chainRestLinks = lPitch => lRest => lRest !== 0 ? lRest / lPitch : 0;
 
 class Calc {
   constructor(lChainPitch) {
@@ -44,6 +49,7 @@ class Calc {
     this.chainLengthRest = chainLengthRest(lChainPitch);
     this.chainringRadius = sprocketRadius(lChainPitch);
     this.sprocketRadius = sprocketRadius(lChainPitch);
+    this.chainRestLinks = chainRestLinks(lChainPitch);
   }
 }
 

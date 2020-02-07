@@ -85,6 +85,7 @@ const calc = new Calc(inData.chain.pitch);
 const lChain = calc.naiveChainLength(inData.chainring.teeth, inData.cog.teeth, inData.drivetrain.length);
 const nChain = calc.chainLengthToN(lChain);
 const lRestChain = calc.chainLengthRest(lChain);
+const lRestLinks = calc.chainRestLinks(lRestChain);
 
 // provisional output
 const outputString = `
@@ -92,7 +93,7 @@ The bike's drivetrain is ${show.mm(inData.drivetrain.length)} long. For
 chainring and cog with, respectively, ${inData.chainring.teeth} and
 ${inData.cog.teeth} teeth the minimum chain length is ${show.mm(lChain)}.
 That corresponds to ${nChain} links with ${show.mm(lRestChain)}
-remaining for slack.
+remaining for slack (${lRestLinks.toFixed(1)} links).
 `;
 
 console.log(outputString);
