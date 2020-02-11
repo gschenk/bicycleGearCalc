@@ -7,12 +7,12 @@ chain:
     pitch: length
     roller diametre: length
 chainring:
-    teeth: number
+    teeth: number array
     chainline: length
 chainstay:
     length: length
 cog:
-    teeth: number
+    teeth: number array
     chainline: length
 drivetrain:
     length: length

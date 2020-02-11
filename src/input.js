@@ -17,6 +17,23 @@ const unitConversion = dict => valUnit => {
   return factor && value ? factor * value : NaN;
 };
 
+
+// arrayConversion :: String -> String -> [a]
+const arrayConversion = isNumber => valStr => {
+  const f = isNumber
+    ? a => parseFloat(a)
+    : a => a;
+  // values with units may only be split by comma,
+  // other values also by empty space
+  const values = /\s|,\s/.test(valStr)
+    ? valStr.split(/\s+|,\s+/)
+      .filter(a => a)
+      .map(f)
+    : [valStr];
+  return values;
+};
+
+
 // returns unique keys all objects passed to it have amongst each other
 const combinedUniqeKeys = (...os) => [...os.map(o => Object.keys(o))]
   .flat()
@@ -58,10 +75,18 @@ class Input {
       const innerKeys = validKeys(template[k])(innerData, innerDefault);
 
       const result = innerKeys.map(l => {
+        // tests for special input cases
         const token = template[k][l];
         const isUnit = knownUnits.includes(token);
+        const isArray = /array/.test(token);
+        const isNumber = /number/.test(token);
+
         const rawValue = innerData[l] ? innerData[l] : defaults[k][l];
-        const value = isUnit ? convert(token)(rawValue) : rawValue;
+        const value = isUnit
+          ? convert(token)(rawValue)
+          : isArray
+          ? arrayConversion(isNumber)(rawValue)
+          : rawValue;
 
         // here's the actual property asignment in this constructor
         // this may be controversial, confer:
