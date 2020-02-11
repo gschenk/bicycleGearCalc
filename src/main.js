@@ -82,18 +82,31 @@ if (config.help) {
 // calculations
 const calc = new Calc(inData.chain.pitch);
 
-const lChain = calc.naiveChainLength(inData.chainring.teeth, inData.cog.teeth, inData.drivetrain.length);
-const nChain = calc.chainLengthToN(lChain);
-const lRestChain = calc.chainLengthRest(lChain);
-const lRestLinks = calc.chainRestLinks(lRestChain);
+// const lChain = calc.naiveChainLength(inData.chainring.teeth[0], inData.cog.teeth[0], inData.drivetrain.length);
+const chainProperties = lDrivetrain => (nChainring, nCog) => {
+  const lChain = calc.naiveChainLength(nChainring, nCog, lDrivetrain);
+  const nChain = calc.chainLengthToN(lChain);
+  const lRestChain = calc.chainLengthRest(lChain);
+  const lRestLinks = calc.chainRestLinks(lRestChain);
+  return {
+    nChainring, nCog, lChain, nChain, lRestChain, lRestLinks,
+  };
+};
+
+const chainLengthResult = inData.chainring.teeth.map(m => inData.cog.teeth.map(n => chainProperties(inData.drivetrain.length)(m, n))).flat();
 
 // provisional output
-const outputString = `
-The bike's drivetrain is ${show.mm(inData.drivetrain.length)} long. For
-chainring and cog with, respectively, ${inData.chainring.teeth} and
-${inData.cog.teeth} teeth the minimum chain length is ${show.mm(lChain)}.
-That corresponds to ${nChain} links with ${show.mm(lRestChain)}
-remaining for slack (${lRestLinks.toFixed(1)} links).
-`;
-
-console.log(outputString);
+console.log(
+  chainLengthResult.map(o => {
+    const {
+      nChainring, nCog, lChain, nChain, lRestChain, lRestLinks,
+    } = o;
+    return `
+    The bike's drivetrain is ${show.mm(inData.drivetrain.length)} long. For
+    chainring and cog with, respectively, ${nChainring} and
+    ${nCog} teeth the minimum chain length is ${show.mm(lChain)}.
+    That corresponds to ${nChain} links with ${show.mm(lRestChain)}
+    remaining for slack (${lRestLinks.toFixed(1)} links).
+    `;
+  }).reduce((as, a) => `${as} ${a}`),
+);
