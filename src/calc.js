@@ -42,14 +42,45 @@ const chainLengthRest = lPitch => lChain => 2 * lPitch - (lChain % (2 * lPitch))
 // rest in units of links
 const chainRestLinks = lPitch => lRest => lRest !== 0 ? lRest / lPitch : 0;
 
+// at the rear the chainstay is offset from the median plane and thus
+// slightly shorter than the drivetrain length. Here this offset is
+// approximated to calculate the actual drivetrain length.
+const drivetrainLength = (
+  lBBWidth,
+  lDropoutsDistance,
+  lDropoutsThickness,
+  lChainstayBBOffset,
+) => lChainstay => {
+  // lChainstayBBOffset is optional, if not available,
+  // 3/8 lBBWidth is a rough approx.
+  const lFrontOffset = lChainstayBBOffset || (3 * lBBWidth) / 8;
+  const lRearOffset = lDropoutsDistance / 2 - lDropoutsThickness;
+  // (i) at the front by about half the BB width
+  // [optional parameter, lChainstayBBOffset]
+  // and (ii) at the back by half the OLD
+  return Math.sqrt(lChainstay ** 2 - (lRearOffset - lFrontOffset) ** 2);
+};
+
 class Calc {
-  constructor(lChainPitch) {
+  constructor(
+    lChainPitch,
+    lBBWidth,
+    lDropoutsDistance,
+    lDropoutsThickness,
+    lChainstayBBOffset,
+  ) {
     this.naiveChainLength = naiveChainLength(lChainPitch);
     this.chainLengthToN = chainLengthToN(lChainPitch);
     this.chainLengthRest = chainLengthRest(lChainPitch);
     this.chainringRadius = sprocketRadius(lChainPitch);
     this.sprocketRadius = sprocketRadius(lChainPitch);
     this.chainRestLinks = chainRestLinks(lChainPitch);
+    this.drivetrainLength = drivetrainLength(
+      lBBWidth,
+      lDropoutsDistance,
+      lDropoutsThickness,
+      lChainstayBBOffset,
+    );
   }
 }
 

@@ -11,6 +11,7 @@ chainring:
     chainline: length
 chainstay:
     length: length
+    offset: length
 cog:
     teeth: number array
     chainline: length
@@ -18,6 +19,7 @@ drivetrain:
     length: length
 dropouts:
     distance: length
+    thickness: length
 tyre:
     bead diametre: length
     width: length

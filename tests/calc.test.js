@@ -40,6 +40,18 @@ describe('test calc functions', () => {
       calc.chainLengthRest(a),
     ).toBe(b);
   });
+  test.each([
+    [[67, 130, 5], 405, 403.4956435638432],
+    [[67, 130, 5, 90], 405, 403.8873605350878],
+    [[67, 130, 5, 20], 405, 403.01985062773275],
+    [[67, 130, 5], 420, 418.54956023749446],
+    [[67, 120, 5], 405, 403.8966258524575],
+    [[92, 135, 5], 405, 404.0309394093477],
+  ])('drivetrain length from geometry (%s, %s)', (as, b, expected) => {
+    const calc = new Calc(1, ...as);
+    const calculated = calc.drivetrainLength(b);
+    expect(Math.abs(calculated - expected)).toBeLessThan(2 * EPS);
+  });
 });
 
 // describe('default.js objects consistency', () => {
