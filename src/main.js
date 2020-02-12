@@ -81,12 +81,29 @@ if (config.help) {
 
 
 // calculations
-const calc = new Calc(inData.chain.pitch);
+// new calc object, created with some closures on
+// some constant values
+const calc = new Calc(
+  inData.chain.pitch,
+  inData['bottom bracket'].width,
+  inData.dropouts.distance,
+  inData.dropouts.thickness,
+  inData.chainstay.offset,
+);
 
 const chainProps = chain.chainProperties(calc);
 
+// users may or may not provide an actual drivetrain length
+// if it is missing we calculate it from frame geometry,
+// it is typically between 1 mm and 2 mm shorter than chainstay length
+const lDrivetrain = (inData.drivetrain && inData.drivetrain.length)
+  || calc.drivetrainLength(
+    inData.chainstay.length,
+  );
+
+
 const chainLengthResult = inData.chainring.teeth
-  .map(m => inData.cog.teeth.map(n => chainProps(inData.drivetrain.length)(m, n)))
+  .map(m => inData.cog.teeth.map(n => chainProps(lDrivetrain)(m, n)))
   .flat();
 
 // provisional output
@@ -96,7 +113,7 @@ console.log(
       nChainring, nCog, lChain, nChain, lRestChain, lRestLinks,
     } = o;
     return `
-    The bike's drivetrain is ${show.mm(inData.drivetrain.length)} long. For
+    The bike's drivetrain is ${show.mm(lDrivetrain)} long. For
     chainring and cog with, respectively, ${nChainring} and
     ${nCog} teeth the minimum chain length is ${show.mm(lChain)}.
     That corresponds to ${nChain} links with ${show.mm(lRestChain)}
