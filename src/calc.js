@@ -15,7 +15,7 @@ const upFreeChainLength = (rChainring, rCog, lDrivetrain) => Math.sqrt(
 );
 
 // returns evolvement of a cog/chainring by the chain
-const chainEvolvement = (rC, aSep) => 2 * (aSep / Math.PI) * rC;
+const chainEvolvement = (rC, aSep) => 2 * aSep * rC;
 
 // returns the length of chain for a perfectly taut chain wit no errors
 // naiveChainLength :: Float -> Integer -> Integer -> Float -> Float
