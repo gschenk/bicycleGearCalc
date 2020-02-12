@@ -5,6 +5,7 @@ const units = require('./units');
 const read = require('./read');
 const Input = require('./input');
 const Calc = require('./calc');
+const chain = require('./chain');
 
 
 // switchedLog :: Bool -> Function
@@ -82,18 +83,11 @@ if (config.help) {
 // calculations
 const calc = new Calc(inData.chain.pitch);
 
-// const lChain = calc.naiveChainLength(inData.chainring.teeth[0], inData.cog.teeth[0], inData.drivetrain.length);
-const chainProperties = lDrivetrain => (nChainring, nCog) => {
-  const lChain = calc.naiveChainLength(nChainring, nCog, lDrivetrain);
-  const nChain = calc.chainLengthToN(lChain);
-  const lRestChain = calc.chainLengthRest(lChain);
-  const lRestLinks = calc.chainRestLinks(lRestChain);
-  return {
-    nChainring, nCog, lChain, nChain, lRestChain, lRestLinks,
-  };
-};
+const chainProps = chain.chainProperties(calc);
 
-const chainLengthResult = inData.chainring.teeth.map(m => inData.cog.teeth.map(n => chainProperties(inData.drivetrain.length)(m, n))).flat();
+const chainLengthResult = inData.chainring.teeth
+  .map(m => inData.cog.teeth.map(n => chainProps(inData.drivetrain.length)(m, n)))
+  .flat();
 
 // provisional output
 console.log(
