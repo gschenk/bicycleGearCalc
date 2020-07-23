@@ -108,3 +108,7 @@ console.log(
     .map(o => Format.chainLengthResult(o))
     .reduce((as, a) => `${as} ${a}`),
 );
+
+console.log(
+  Format.cogRingMat(chainLengthResult, 'lRestChain', 'mm'),
+);

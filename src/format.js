@@ -12,6 +12,7 @@ const showInUnits = unitDict => unitToken => decimals => (...values) => {
 
 const show = {
   // mmString Number -> String
+  int: Math.round,
   mm: showInUnits(units.length.values)('mm')(1),
   deg: showInUnits(units.angle.values)('deg')(1),
 };
@@ -21,6 +22,7 @@ function help(obj) {
   return yaml.safeDump(obj);
 }
 
+// takes a single cog/chainring results object and returns string
 function chainLengthResult(obj) {
   const {
     nChainring, nCog, lChain, nChain, lRestChain, lRestLinks,
@@ -33,4 +35,22 @@ function chainLengthResult(obj) {
     `;
 }
 
-module.exports = {show, help, chainLengthResult};
+// takes whole charinLengthResults object and prints results
+// as cog, ring matrix yaml dump
+function cogRingMat(obj, key, unit = 'int') {
+  const returnObj = obj
+    .map(o => ({[o.nChainring]: {[o.nCog]: show[unit](o[key])}}))
+    .reduce((os, o) => {
+      // join inner and outer nested object elements
+      const k = Object.keys(o).join();
+      const newO = Object.keys(os).includes(k)
+        ? {[k]: {...os[k], ...o[k]}}
+        : o;
+      return {...os, ...newO};
+    }, {});
+  return yaml.safeDump(returnObj);
+}
+
+module.exports = {
+  show, help, chainLengthResult, cogRingMat,
+};
