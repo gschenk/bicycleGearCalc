@@ -21,4 +21,16 @@ function help(obj) {
   return yaml.safeDump(obj);
 }
 
-module.exports = {show, help};
+function chainLengthResult(obj) {
+  const {
+    nChainring, nCog, lChain, nChain, lRestChain, lRestLinks,
+  } = obj;
+  return `
+    For chainring and cog with, respectively, ${nChainring} and
+    ${nCog} teeth the minimum chain length is ${show.mm(lChain)}.
+    That corresponds to ${nChain} links with ${show.mm(lRestChain)}
+    remaining for slack (${lRestLinks.toFixed(1)} links).
+    `;
+}
+
+module.exports = {show, help, chainLengthResult};

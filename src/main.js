@@ -92,23 +92,19 @@ const lDrivetrain = (inData.drivetrain && inData.drivetrain.length)
     inData.chainstay.length,
   );
 
-
+// calculate chain length
 const chainLengthResult = inData.chainring.teeth
   .map(m => inData.cog.teeth.map(n => chainProps(lDrivetrain)(m, n)))
   .flat();
 
 // provisional output
+
 console.log(
-  chainLengthResult.map(o => {
-    const {
-      nChainring, nCog, lChain, nChain, lRestChain, lRestLinks,
-    } = o;
-    return `
-    The bike's drivetrain is ${show.mm(lDrivetrain)} long. For
-    chainring and cog with, respectively, ${nChainring} and
-    ${nCog} teeth the minimum chain length is ${show.mm(lChain)}.
-    That corresponds to ${nChain} links with ${show.mm(lRestChain)}
-    remaining for slack (${lRestLinks.toFixed(1)} links).
-    `;
-  }).reduce((as, a) => `${as} ${a}`),
+  `The bike's drivetrain is ${show.mm(lDrivetrain)} long.`,
+);
+
+console.log(
+  chainLengthResult
+    .map(o => Format.chainLengthResult(o))
+    .reduce((as, a) => `${as} ${a}`),
 );
