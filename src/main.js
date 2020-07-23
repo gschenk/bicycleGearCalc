@@ -4,6 +4,7 @@ const tools = require('./tools');
 const units = require('./units');
 const read = require('./read');
 const Input = require('./input');
+const Format = require('./format');
 const Calc = require('./calc');
 const chain = require('./chain');
 
@@ -72,7 +73,7 @@ if (config.help) {
   console.log(
     'This programme accepts up to two comand line arguments from the following set:',
   );
-  console.log(defaults.knownCliArguments);
+  console.log(Format.help(defaults.knownCliArguments));
   process.exit(0);
   console.log(
     'where .yaml and .yml denote any input file, including path, with that end.',
