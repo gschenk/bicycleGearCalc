@@ -8,22 +8,12 @@ const Format = require('./format');
 const Calc = require('./calc');
 const chain = require('./chain');
 
+const {show} = Format;
 
 // switchedLog :: Bool -> Function
 const switchedLog = b => b ? console.log : (() => undefined);
 
 // some functions that need a more suitable home
-// showInUnits:: Object -> String -> Integer -> Number -> String
-const showInUnits = unitDict => unitToken => decimals => (...values) => {
-  const converteds = values.map(x => (x / unitDict[unitToken])
-    .toFixed(decimals));
-  return converteds.map(x => `${x} ${unitToken}`).join(', ');
-};
-const show = {
-  // mmString Number -> String
-  mm: showInUnits(units.length.values)('mm')(1),
-  deg: showInUnits(units.angle.values)('deg')(1),
-};
 
 // putting configuration together
 const config = new Config(
