@@ -89,18 +89,18 @@ const chainLengthResult = inData.chainring.teeth
   .map(m => inData.cog.teeth.map(n => chainProps(lDrivetrain)(m, n)))
   .flat();
 
-// provisional output
+// output
 
-console.log(
+out.prose(
   `The bike's drivetrain is ${show.mm(lDrivetrain)} long.`,
 );
 
-console.log(
+out.prose(
   chainLengthResult
-    .map(o => Format.chainLengthResult(o))
+    .map(o => Format.chainLengthProse(o))
     .reduce((as, a) => `${as} ${a}`),
 );
 
-console.log(
-  Format.cogRingMat(chainLengthResult, 'lRestChain', 'mm'),
+out.slack(
+  Format.slackMatrix(chainLengthResult),
 );

@@ -23,7 +23,7 @@ function help(obj) {
 }
 
 // takes a single cog/chainring results object and returns string
-function chainLengthResult(obj) {
+function chainLengthProse(obj) {
   const {
     nChainring, nCog, lChain, nChain, lRestChain, lRestLinks,
   } = obj;
@@ -37,7 +37,7 @@ function chainLengthResult(obj) {
 
 // takes whole charinLengthResults object and prints results
 // as cog, ring matrix yaml dump
-function cogRingMat(obj, key, unit = 'int') {
+const cogRingMatrix = (key, unit = 'int') => obj => {
   const returnObj = obj
     .map(o => ({[o.nChainring]: {[o.nCog]: show[unit](o[key])}}))
     .reduce((os, o) => {
@@ -49,8 +49,11 @@ function cogRingMat(obj, key, unit = 'int') {
       return {...os, ...newO};
     }, {});
   return yaml.safeDump(returnObj);
-}
+};
+
+const slackMatrix = cogRingMatrix('lRestChain', 'mm');
+//  Format.cogRingMat(chainLengthResult, 'lRestChain', 'mm'),
 
 module.exports = {
-  show, help, chainLengthResult, cogRingMat,
+  show, help, chainLengthProse, slackMatrix,
 };

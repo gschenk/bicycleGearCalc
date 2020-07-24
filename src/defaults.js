@@ -10,6 +10,9 @@ const defaultCfg = {
     inputDefaults: './templates/input.defaults.yml',
   },
   file: './templates/input.defaults.yml',
+  prose: false,
+  links: false,
+  slack: false,
 };
 
 // argument flags are mapped to these
@@ -19,6 +22,9 @@ const configForArg = arg => ({
   file: {file: arg},
   verbose: {verbose: true},
   help: {help: true},
+  prose: {prose: true},
+  links: {links: true},
+  slack: {slack: true},
 });
 
 // dictionary of accepted argument patterns
@@ -32,6 +38,9 @@ const knownCliArguments = {
   '-h': 'help',
   '--help': 'help',
   '-?': 'help',
+  '--prose': 'prose', // output results in full sentences
+  '--links': 'links', // output of yaml formated number of links in chain
+  '--slack': 'slack', // output of yaml formated slack in chain
 };
 
 module.exports = {
