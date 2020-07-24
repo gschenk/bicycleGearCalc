@@ -4,18 +4,14 @@ const tools = require('./tools');
 const units = require('./units');
 const read = require('./read');
 const Input = require('./input');
+const Output = require('./output');
 const Format = require('./format');
 const Calc = require('./calc');
 const chain = require('./chain');
 
 const {show} = Format;
 
-// switchedLog :: Bool -> Function
-const switchedLog = b => b ? console.log : (() => undefined);
-
-// some functions that need a more suitable home
-
-// putting configuration together
+// putting configuration object together
 const config = new Config(
   process.argv,
   defaults.defaultCfg,
@@ -24,11 +20,10 @@ const config = new Config(
 );
 Object.freeze(config);
 
-// setting verbose output function
-const vLog = switchedLog(config.verbose);
+// config provides closures that toggle output functions
+const out = new Output(config);
 
-vLog('Config', config);
-
+out.verbose('Config', config);
 
 // closure on Data constructor
 function InData(dataObject) {
@@ -40,14 +35,12 @@ function InData(dataObject) {
   );
 }
 
-
 // read input data
 const inData = new InData(
   read.readFile(config.file),
 );
 
-vLog(inData);
-
+out.verbose(inData);
 
 // error handling
 if (config.err !== 0) {
@@ -69,7 +62,6 @@ if (config.help) {
     'where .yaml and .yml denote any input file, including path, with that end.',
   );
 }
-
 
 // calculations
 // new calc object, created with some closures on
