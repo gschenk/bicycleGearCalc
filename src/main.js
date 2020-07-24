@@ -9,7 +9,6 @@ const Format = require('./format');
 const Calc = require('./calc');
 const chain = require('./chain');
 
-const {show} = Format;
 
 // putting configuration object together
 const config = new Config(
@@ -22,6 +21,10 @@ Object.freeze(config);
 
 // config provides closures that toggle output functions
 const out = new Output(config);
+
+// outputs can be formated with these tools
+const format = new Format(units);
+
 
 out.verbose('Config', config);
 
@@ -56,7 +59,7 @@ if (config.help) {
   console.log(
     'This programme accepts up to two comand line arguments from the following set:',
   );
-  console.log(Format.help(defaults.knownCliArguments));
+  console.log(format.help(defaults.knownCliArguments));
   process.exit(0);
   console.log(
     'where .yaml and .yml denote any input file, including path, with that end.',
@@ -92,15 +95,15 @@ const chainLengthResult = inData.chainring.teeth
 // output
 
 out.prose(
-  `The bike's drivetrain is ${show.mm(lDrivetrain)} long.`,
+  `The bike's drivetrain is ${format.show.mm(lDrivetrain)} long.`,
 );
 
 out.prose(
   chainLengthResult
-    .map(o => Format.chainLengthProse(o))
+    .map(o => format.chainLengthProse(o))
     .reduce((as, a) => `${as} ${a}`),
 );
 
 out.slack(
-  Format.slackMatrix(chainLengthResult),
+  format.slackMatrix(chainLengthResult),
 );

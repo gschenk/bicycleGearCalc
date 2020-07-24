@@ -17,11 +17,6 @@ const show = {
   deg: showInUnits(units.angle.values)('deg')(1),
 };
 
-// formats list of CLI arguments (obj) for help text
-function help(obj) {
-  return yaml.safeDump(obj);
-}
-
 // takes a single cog/chainring results object and returns string
 function chainLengthProse(obj) {
   const {
@@ -51,9 +46,16 @@ const cogRingMatrix = (key, unit = 'int') => obj => {
   return yaml.safeDump(returnObj);
 };
 
-const slackMatrix = cogRingMatrix('lRestChain', 'mm');
 //  Format.cogRingMat(chainLengthResult, 'lRestChain', 'mm'),
 
-module.exports = {
-  show, help, chainLengthProse, slackMatrix,
-};
+class Format {
+  constructor() {
+    // formats list of CLI arguments (obj) for help text
+    this.help = yaml.safeDump;
+    this.show = show;
+    this.chainLengthProse = chainLengthProse;
+    this.slackMatrix = cogRingMatrix('lRestChain', 'mm');
+  }
+}
+
+module.exports = Format;
