@@ -32,11 +32,15 @@ const cogRingMatrix = fContent => obj => {
   return yaml.safeDump(returnObj);
 };
 
+// constructed with units object, provides functions that
+// format results (and other) output
 class Format {
   constructor(units) {
     // formats list of CLI arguments (obj) for help text
+    // help :: Obj -> String
     this.help = yaml.safeDump;
-    // functions that return physical values with units
+
+    // functions that return strings of physical values with units
     this.show = {
       // [Number] -> String
       int: `${Math.round}`,
@@ -46,11 +50,16 @@ class Format {
       deg: showInUnits(units.angle.values)('deg')(1),
     };
 
+    // returns a yaml formated string of a matrix (cog, chainring)
+    // with excess chain length remaining for slack as values
     this.slackMatrix = cogRingMatrix(o => this.show.mm(o.lRestChain));
 
+    // returns a yaml formated string of a matrix (cog, chainring)
+    // with number of links in chain - slack links as values
     this.linksMatrix = cogRingMatrix(
       o => `${o.nChain} - ${this.show.fix2(o.lRestLinks)}`,
     );
+
     // takes a single cog/chainring results object and returns string
     this.chainLengthProse = obj => proseTemplate([
       obj.nChainring,

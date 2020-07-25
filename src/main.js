@@ -9,7 +9,6 @@ const Format = require('./format');
 const Calc = require('./calc');
 const chain = require('./chain');
 
-
 // putting configuration object together
 const config = new Config(
   process.argv,
@@ -24,7 +23,6 @@ const out = new Output(config);
 
 // outputs can be formated with these tools
 const format = new Format(units);
-
 
 out.verbose('Config', config);
 
@@ -104,6 +102,6 @@ out.prose(
     .reduce((as, a) => `${as} ${a}`),
 );
 
-out.links( format.linksMatrix(chainLengthResult));
+out.links(format.linksMatrix(chainLengthResult));
 
-out.slack( format.slackMatrix(chainLengthResult));
+out.slack(format.slackMatrix(chainLengthResult));

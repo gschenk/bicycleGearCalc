@@ -3,7 +3,6 @@ const tools = require('./tools');
 
 const pwitch = tools.pureSwitch;
 
-
 // in: dicitionary symbol to value
 // in: dictiionary symbol translations
 // return: Number, or false when cannot comprehend
@@ -16,7 +15,6 @@ const unitConversion = dict => valUnit => {
     : 1;
   return factor && value ? factor * value : NaN;
 };
-
 
 // arrayConversion :: String -> String -> [a]
 const arrayConversion = isNumber => valStr => {
@@ -33,7 +31,6 @@ const arrayConversion = isNumber => valStr => {
   return values;
 };
 
-
 // returns unique keys all objects passed to it have amongst each other
 const combinedUniqeKeys = (...os) => [...os.map(o => Object.keys(o))]
   .flat()
@@ -44,7 +41,6 @@ const validKeys = (...os) => (...ps) => tools.reduceSort(
   combinedUniqeKeys(...os)
     .filter(o => combinedUniqeKeys(...ps).includes(o)),
 );
-
 
 // creates objects holding input data
 // the data is structured as the `template` which also
