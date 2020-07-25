@@ -1,6 +1,5 @@
 // formats output nicely
 const yaml = require('js-yaml');
-const units = require('./units');
 
 // private, format physical values with units
 // showInUnits:: Object -> String -> Integer -> Number -> String
@@ -10,27 +9,12 @@ const showInUnits = unitDict => unitToken => decimals => (...values) => {
   return converteds.map(x => `${x} ${unitToken}`).join(', ');
 };
 
-// functions that return physical values with units
-const show = {
-  // [Number] -> String
-  int: `${Math.round}`,
-  fix2: (...xs) => xs.map(x => x.toFixed(2)).join(', '),
-  mm: showInUnits(units.length.values)('mm')(1),
-  deg: showInUnits(units.angle.values)('deg')(1),
-};
-
-// takes a single cog/chainring results object and returns string
-function chainLengthProse(obj) {
-  const {
-    nChainring, nCog, lChain, nChain, lRestChain, lRestLinks,
-  } = obj;
-  return `
-    For chainring and cog with, respectively, ${nChainring} and
-    ${nCog} teeth the minimum chain length is ${show.mm(lChain)}.
-    That corresponds to ${nChain} links with ${show.mm(lRestChain)}
-    remaining for slack (${lRestLinks.toFixed(1)} links).
+const proseTemplate = ss => `
+    For chainring and cog with, respectively, ${ss[0]} and
+    ${ss[1]} teeth the minimum chain length is ${ss[2]}.
+    That corresponds to ${ss[3]} links with ${ss[4]}
+    remaining for slack (${ss[5]} links).
     `;
-}
 
 // takes whole charinLengthResults object and prints results
 // as cog, ring matrix yaml dump
@@ -48,18 +32,34 @@ const cogRingMatrix = fContent => obj => {
   return yaml.safeDump(returnObj);
 };
 
-//  Format.cogRingMat(chainLengthResult, 'lRestChain', 'mm'),
-
 class Format {
-  constructor() {
+  constructor(units) {
     // formats list of CLI arguments (obj) for help text
     this.help = yaml.safeDump;
-    this.show = show;
-    this.chainLengthProse = chainLengthProse;
+    // functions that return physical values with units
+    this.show = {
+      // [Number] -> String
+      int: `${Math.round}`,
+      fix2: (...xs) => xs.map(x => x.toFixed(2)).join(', '),
+      mm: showInUnits(units.length.values)('mm')(1),
+      cm: showInUnits(units.length.values)('cm')(1),
+      deg: showInUnits(units.angle.values)('deg')(1),
+    };
 
     this.slackMatrix = cogRingMatrix(o => this.show.mm(o.lRestChain));
 
-    this.linksMatrix = cogRingMatrix(o => `${o.nChain} - ${this.show.fix2(o.lRestLinks)}`);
+    this.linksMatrix = cogRingMatrix(
+      o => `${o.nChain} - ${this.show.fix2(o.lRestLinks)}`,
+    );
+    // takes a single cog/chainring results object and returns string
+    this.chainLengthProse = obj => proseTemplate([
+      obj.nChainring,
+      obj.nCog,
+      this.show.cm(obj.lChain),
+      obj.nChain,
+      this.show.mm(obj.lRestChain),
+      this.show.fix2(obj.lRestLinks),
+    ]);
   }
 }
 
