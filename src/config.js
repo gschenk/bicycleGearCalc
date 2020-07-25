@@ -7,7 +7,6 @@ const {zipWith, pureSwitch, matchSwitch} = tools;
 
 // object with f to check validity of cli arguments
 
-
 const validity = {
   tests: (maxArgs, knownArgsObject) => {
     const bla = {
@@ -28,7 +27,6 @@ const validity = {
   },
 };
 
-
 // makeBadReturn :: [s] -> [a] -> { s: a } -> { s: a }
 const makeBadReturn = (errKeys, errResults, errCases) => () => {
   const defaultErr = {err: 22}; // EINVAL
@@ -39,7 +37,6 @@ const makeBadReturn = (errKeys, errResults, errCases) => () => {
     ? pureSwitch(errCases)(defaultErr)(filterdFailedKeys[0])
     : defaultErr;
 };
-
 
 // makeGoodReturn ::
 // String s => { s, s } -> { s, a } -> (s -> { s, { s, a } }) -> s -> { s, a }
@@ -56,7 +53,6 @@ const makeGoodReturn = (knownArgs, cases) => args => {
     ? returnCasesArray.reduce((o, a) => ({...o, ...a}))
     : defaultCase;
 };
-
 
 // Takes an object that contains some keys that are
 // a subset of the keys of the second argument.
@@ -80,7 +76,6 @@ const consolidateReturn = (parts, defaults) => {
     zipper(parts, defaults),
   )(defaultKeys)(keysIncluded).reduce(reducer);
 };
-
 
 // Takes CLI arguments (argv) and checks them against a dictionary of
 // known parameters `knownCliArguments`. Objects from `argumentReturn`
