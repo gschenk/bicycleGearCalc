@@ -10,7 +10,7 @@ const defaultCfg = {
     inputDefaults: './templates/input.defaults.yml',
   },
   file: './templates/input.defaults.yml',
-  prose: false,
+  prose: true,
   links: false,
   slack: false,
 };
@@ -23,8 +23,8 @@ const configForArg = arg => ({
   verbose: {verbose: true},
   help: {help: true},
   prose: {prose: true},
-  links: {links: true},
-  slack: {slack: true},
+  links: {links: true, prose: false},
+  slack: {slack: true, prose: false},
 });
 
 // dictionary of accepted argument patterns
