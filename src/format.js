@@ -10,9 +10,11 @@ const showInUnits = unitDict => unitToken => decimals => (...values) => {
   return converteds.map(x => `${x} ${unitToken}`).join(', ');
 };
 
+// functions that return physical values with units
 const show = {
-  // mmString Number -> String
-  int: Math.round,
+  // [Number] -> String
+  int: `${Math.round}`,
+  fix2: (...xs) => xs.map(x => x.toFixed(2)).join(', '),
   mm: showInUnits(units.length.values)('mm')(1),
   deg: showInUnits(units.angle.values)('deg')(1),
 };
@@ -32,9 +34,9 @@ function chainLengthProse(obj) {
 
 // takes whole charinLengthResults object and prints results
 // as cog, ring matrix yaml dump
-const cogRingMatrix = (key, unit = 'int') => obj => {
+const cogRingMatrix = fContent => obj => {
   const returnObj = obj
-    .map(o => ({[o.nChainring]: {[o.nCog]: show[unit](o[key])}}))
+    .map(o => ({[o.nChainring]: {[o.nCog]: fContent(o)}}))
     .reduce((os, o) => {
       // join inner and outer nested object elements
       const k = Object.keys(o).join();
@@ -54,7 +56,10 @@ class Format {
     this.help = yaml.safeDump;
     this.show = show;
     this.chainLengthProse = chainLengthProse;
-    this.slackMatrix = cogRingMatrix('lRestChain', 'mm');
+
+    this.slackMatrix = cogRingMatrix(o => this.show.mm(o.lRestChain));
+
+    this.linksMatrix = cogRingMatrix(o => `${o.nChain} - ${this.show.fix2(o.lRestLinks)}`);
   }
 }
 

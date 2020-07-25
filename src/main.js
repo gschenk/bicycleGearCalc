@@ -104,6 +104,6 @@ out.prose(
     .reduce((as, a) => `${as} ${a}`),
 );
 
-out.slack(
-  format.slackMatrix(chainLengthResult),
-);
+out.links( format.linksMatrix(chainLengthResult));
+
+out.slack( format.slackMatrix(chainLengthResult));
