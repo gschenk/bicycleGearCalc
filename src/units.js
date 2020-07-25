@@ -99,10 +99,8 @@ const text = {
 };
 deepFreeze(text);
 
-
 // there is no unambiguous meaning for these unit symbols
 const ambiguous = ['Mi', 'Oz', 'gr', 'mi', 'M'];
-
 
 module.exports = {
   length, mass, force, angle, ambiguous,
