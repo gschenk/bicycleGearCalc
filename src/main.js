@@ -8,6 +8,7 @@ const Output = require('./output');
 const Format = require('./format');
 const Calc = require('./calc');
 const chain = require('./chain');
+const Results = require('./results');
 
 // putting configuration object together
 const config = new Config(
@@ -64,6 +65,9 @@ if (config.help) {
   );
 }
 
+// new object to store results
+const results = new Results(inData.chainring.teeth, inData.cog.teeth, inData.drivetrain?.length);
+
 // calculations
 // new calc object, created with some closures on
 // some constant values
@@ -78,7 +82,7 @@ const calc = new Calc(
 const chainProps = chain.chainProperties(calc);
 
 // calculate chain length
-const chainLengthResult = inData.chainring.teeth
+results.chainSet = inData.chainring.teeth
   .map(m => inData.cog.teeth.map(n => chainProps(m, n)))
   .flat();
 
@@ -89,11 +93,11 @@ out.prose(
 );
 
 out.prose(
-  chainLengthResult
+  results.chainSet
     .map(o => format.chainLengthProse(o))
     .reduce((as, a) => `${as} ${a}`),
 );
 
-out.links(format.linksMatrix(chainLengthResult));
+out.links(format.linksMatrix(results.chainSet));
 
-out.slack(format.slackMatrix(chainLengthResult));
+out.slack(format.slackMatrix(results.chainSet));
