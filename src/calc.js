@@ -4,18 +4,19 @@ const sprocketRadius = lPitch => nTeeth => (nTeeth * lPitch) / (2 * Math.PI);
 
 // returns the angle [rad] at which the chain joins the chainring
 // chainJoinAngle :: Float -> Float -> Float -> Float
-const chainJoinAngle = (rChainring, rCog, lDrivetrain) => Math.acos(
-  (rCog - rChainring) / lDrivetrain,
+const chainJoinAngle = (rChainring, rCog, lDrivetrain) => Math.asin(
+  (rChainring - rCog) / lDrivetrain,
 );
 
 // returns the straight line between points of cog separation and chainring join
 // upFreeChainLength :: Float -> Float -> Float -> Float
 const upFreeChainLength = (rChainring, rCog, lDrivetrain) => Math.sqrt(
-  (rChainring - rCog) ** 2 + lDrivetrain ** 2,
+   lDrivetrain ** 2 - (rChainring - rCog) ** 2,
 );
 
 // returns evolvement of a cog/chainring by the chain
-const chainEvolvement = (rC, aSep) => 2 * aSep * rC;
+// adds circumference of half cog/ring and adds correction for chain angle
+const chainEvolvement = (rC, aSep) => (Math.PI + 2* aSep) * rC;
 
 // returns the length of chain for a perfectly taut chain wit no errors
 // naiveChainLength :: Float -> Integer -> Integer -> Float -> Float
@@ -25,12 +26,12 @@ const naiveChainLength = lPitch => (nChainring, nCog, lDrivetrain) => {
 
   const aJoin = chainJoinAngle(rChainring, rCog, lDrivetrain);
 
-  const lFreeChain = upFreeChainLength(rChainring, rCog, lDrivetrain);
+  const lFreeChain = 2 * upFreeChainLength(rChainring, rCog, lDrivetrain);
   const lChainring = chainEvolvement(rChainring, aJoin);
-  const lCog = chainEvolvement(rCog, aJoin);
+  const lCog = chainEvolvement(rCog, -aJoin);
 
   // assuming: separation angle = aJoin; mirror symetry up/down
-  return lChainring + lCog + (2 * lFreeChain);
+  return lChainring + lCog + lFreeChain;
 };
 
 // even number of links in a chain that is greater than a given length
