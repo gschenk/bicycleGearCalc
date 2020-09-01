@@ -68,35 +68,24 @@ if (config.help) {
 // new calc object, created with some closures on
 // some constant values
 const calc = new Calc(
+  inData.drivetrain.length,
   inData.chain.pitch,
   inData.chain.wear,
-  inData['bottom bracket'].width,
-  inData.dropouts.distance,
-  inData.dropouts.thickness,
-  inData.chainstay.offset,
   inData.chainring.wear,
   inData.cog.wear,
 );
 
 const chainProps = chain.chainProperties(calc);
 
-// users may or may not provide an actual drivetrain length
-// if it is missing we calculate it from frame geometry,
-// it is typically between 1 mm and 2 mm shorter than chainstay length
-const lDrivetrain = (inData.drivetrain && inData.drivetrain.length)
-  || calc.drivetrainLength(
-    inData.chainstay.length,
-  );
-
 // calculate chain length
 const chainLengthResult = inData.chainring.teeth
-  .map(m => inData.cog.teeth.map(n => chainProps(lDrivetrain)(m, n)))
+  .map(m => inData.cog.teeth.map(n => chainProps(m, n)))
   .flat();
 
 // output
 
 out.prose(
-  `The bike's drivetrain is ${format.show.mm(lDrivetrain)} long.`,
+  `The bike's drivetrain is ${format.show.mm(inData.drivetrain.length)} long.`,
 );
 
 out.prose(

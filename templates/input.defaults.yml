@@ -10,16 +10,14 @@ chainring:
     teeth: 44
     wear: 1.0
     chainline: 43.5 mm
-chainstay:
-    length: 405 mm
-    offset: 33 mm
 cog:
     teeth: 16
     wear: 1.0
     chainline: 43.5 mm
 dropouts:
     distance: 130 mm
-    thickness: 5 mm
 tyre:
     bead diametre: 622 mm
     width: 28 mm
+drivetrain:
+    length: 425 mm
