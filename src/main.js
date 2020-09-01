@@ -69,10 +69,13 @@ if (config.help) {
 // some constant values
 const calc = new Calc(
   inData.chain.pitch,
+  inData.chain.wear,
   inData['bottom bracket'].width,
   inData.dropouts.distance,
   inData.dropouts.thickness,
   inData.chainstay.offset,
+  inData.chainring.wear,
+  inData.cog.wear,
 );
 
 const chainProps = chain.chainProperties(calc);
