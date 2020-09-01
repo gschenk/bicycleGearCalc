@@ -3,17 +3,19 @@
 bottom bracket:
     width: 67 mm
 chain:
-    elongation: 0.001
+    wear: 1.003
     pitch: 0.5 in
     roller diametre: 7.75 mm
 chainring:
     teeth: 44
+    wear: 1.0
     chainline: 43.5 mm
 chainstay:
     length: 405 mm
     offset: 33 mm
 cog:
     teeth: 16
+    wear: 1.0
     chainline: 43.5 mm
 dropouts:
     distance: 130 mm
