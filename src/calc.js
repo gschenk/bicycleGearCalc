@@ -1,8 +1,13 @@
 // returns radius of cog or chainring in [m]
 // This is the radius of the circle that circumscribes the polygon
 // formed by the chain elements.
+
+// radius of a regular polygon (circumcircle radius)
+// polygonRadius :: Float -> Integer -> Float
+const polygonRadius = s => n => s / (2 * Math.sin(Math.PI / n));
+
 // calcSprocketRadius :: Float -> Integer -> Float
-const sprocketRadius = lPitch => nTeeth => lPitch / (2 * Math.sin(Math.PI / nTeeth));
+const sprocketRadius = lPitch => nTeeth => polygonRadius(lPitch)(nTeeth);
 
 // returns the angle [rad] at which the chain joins the chainring
 // chainJoinAngle :: Float -> Float -> Float -> Float
@@ -45,8 +50,9 @@ const naiveChainLength = lPitch => (nChainring, nCog, lDrivetrain) => {
 };
 
 const chordalChainLength = lPitch => (nChainring, nCog, lDrivetrain) => {
+  // the radii are required for chain geometry
   const rChainring = sprocketRadius(lPitch)(nChainring);
-  const rCog = sprocketRadius(lPitch)(nCog);
+  const rCog = sprocketRadius(lPitch)(nCog) * 0.99;
 
   const aJoin = chainJoinAngle(rChainring, rCog, lDrivetrain);
   const aSep = -aJoin;
@@ -90,6 +96,7 @@ const drivetrainLength = (
 class Calc {
   constructor(
     lChainPitch,
+    nChainWear,
     lBBWidth,
     lDropoutsDistance,
     lDropoutsThickness,
@@ -97,11 +104,11 @@ class Calc {
   ) {
     this.naiveChainLength = naiveChainLength(lChainPitch);
     this.chainLength = chordalChainLength(lChainPitch);
-    this.chainLengthToN = chainLengthToN(lChainPitch);
-    this.chainLengthRest = chainLengthRest(lChainPitch);
+    this.chainLengthToN = chainLengthToN(lChainPitch * nChainWear);
+    this.chainLengthRest = chainLengthRest(lChainPitch * nChainWear);
     this.chainringRadius = sprocketRadius(lChainPitch);
     this.sprocketRadius = sprocketRadius(lChainPitch);
-    this.chainRestLinks = chainRestLinks(lChainPitch);
+    this.chainRestLinks = chainRestLinks(lChainPitch * nChainWear);
     this.drivetrainLength = drivetrainLength(
       lBBWidth,
       lDropoutsDistance,
