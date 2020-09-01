@@ -74,6 +74,8 @@ const calc = new Calc(
   inData.dropouts.distance,
   inData.dropouts.thickness,
   inData.chainstay.offset,
+  inData.chainring.wear,
+  inData.cog.wear,
 );
 
 const chainProps = chain.chainProperties(calc);

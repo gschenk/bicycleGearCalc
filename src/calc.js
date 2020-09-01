@@ -49,17 +49,25 @@ const naiveChainLength = lPitch => (nChainring, nCog, lDrivetrain) => {
   return lChainring + lCog + lFreeChain;
 };
 
-const chordalChainLength = lPitch => (nChainring, nCog, lDrivetrain) => {
+const chordalChainLength = (
+  lPitch,
+  nChainringWear,
+  nCogWear,
+) => (
+  nChainring,
+  nCog,
+  lDrivetrain,
+) => {
   // the radii are required for chain geometry
-  const rChainring = sprocketRadius(lPitch)(nChainring);
-  const rCog = sprocketRadius(lPitch)(nCog) * 0.99;
+  const rChainring = sprocketRadius(lPitch)(nChainring) * nChainringWear;
+  const rCog = sprocketRadius(lPitch)(nCog) * nCogWear;
 
   const aJoin = chainJoinAngle(rChainring, rCog, lDrivetrain);
   const aSep = -aJoin;
 
   const lFreeChain = 2 * upFreeChainLength(rChainring, rCog, lDrivetrain);
-  const lChainring = evolvedFraction(aJoin) * nChainring * lPitch;
-  const lCog = evolvedFraction(aSep) * nCog * lPitch;
+  const lChainring = evolvedFraction(aJoin) * nChainring * lPitch * nChainringWear;
+  const lCog = evolvedFraction(aSep) * nCog * lPitch * nCogWear;
 
   // assuming: mirror symetry up/down
   return lChainring + lCog + lFreeChain;
@@ -101,9 +109,11 @@ class Calc {
     lDropoutsDistance,
     lDropoutsThickness,
     lChainstayBBOffset,
+    nChainringWear,
+    nCogWear,
   ) {
     this.naiveChainLength = naiveChainLength(lChainPitch);
-    this.chainLength = chordalChainLength(lChainPitch);
+    this.chainLength = chordalChainLength(lChainPitch, nChainringWear, nCogWear);
     this.chainLengthToN = chainLengthToN(lChainPitch * nChainWear);
     this.chainLengthRest = chainLengthRest(lChainPitch * nChainWear);
     this.chainringRadius = sprocketRadius(lChainPitch);
