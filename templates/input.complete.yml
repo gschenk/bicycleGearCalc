@@ -3,17 +3,19 @@
 bottom bracket:
     width: length
 chain:
-    elongation: number
+    wear: number
     pitch: length
     roller diametre: length
 chainring:
     teeth: number array
+    wear: number
     chainline: length
 chainstay:
     length: length
     offset: length
 cog:
     teeth: number array
+    wear: number
     chainline: length
 drivetrain:
     length: length
