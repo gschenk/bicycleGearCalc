@@ -32,7 +32,7 @@ const evolvedFraction = aSep => 0.5 + aSep / Math.PI;
 
 // returns the length of chain for a perfectly taut chain wit no errors
 // naiveChainLength :: Float -> Integer -> Integer -> Float -> Float
-const naiveChainLength = lPitch => (nChainring, nCog, lDrivetrain) => {
+const naiveChainLength = (lDrivetrain, lPitch) => (nChainring, nCog) => {
   const rChainring = sprocketRadius(lPitch)(nChainring);
   const rCog = sprocketRadius(lPitch)(nCog);
 
@@ -50,13 +50,13 @@ const naiveChainLength = lPitch => (nChainring, nCog, lDrivetrain) => {
 };
 
 const chordalChainLength = (
+  lDrivetrain,
   lPitch,
   nChainringWear,
   nCogWear,
 ) => (
   nChainring,
   nCog,
-  lDrivetrain,
 ) => {
   // the radii are required for chain geometry
   const rChainring = sprocketRadius(lPitch)(nChainring) * nChainringWear;
@@ -82,49 +82,26 @@ const chainLengthRest = lPitch => lChain => 2 * lPitch - (lChain % (2 * lPitch))
 // rest in units of links
 const chainRestLinks = lPitch => lRest => lRest !== 0 ? lRest / lPitch : 0;
 
-// at the rear the chainstay is offset from the median plane and thus
-// slightly shorter than the drivetrain length. Here this offset is
-// approximated to calculate the actual drivetrain length.
-const drivetrainLength = (
-  lBBWidth,
-  lDropoutsDistance,
-  lDropoutsThickness,
-  lChainstayBBOffset,
-) => lChainstay => {
-  // lChainstayBBOffset is optional, if not available,
-  // 3/8 lBBWidth is a rough approx.
-  const lFrontOffset = lChainstayBBOffset || (3 * lBBWidth) / 8;
-  const lRearOffset = lDropoutsDistance / 2 - lDropoutsThickness;
-  // (i) at the front by about half the BB width
-  // [optional parameter, lChainstayBBOffset]
-  // and (ii) at the back by half the OLD
-  return Math.sqrt(lChainstay ** 2 - (lRearOffset - lFrontOffset) ** 2);
-};
-
 class Calc {
   constructor(
+    lDrivetrain,
     lChainPitch,
     nChainWear,
-    lBBWidth,
-    lDropoutsDistance,
-    lDropoutsThickness,
-    lChainstayBBOffset,
     nChainringWear,
     nCogWear,
   ) {
-    this.naiveChainLength = naiveChainLength(lChainPitch);
-    this.chainLength = chordalChainLength(lChainPitch, nChainringWear, nCogWear);
+    this.naiveChainLength = naiveChainLength(lDrivetrain, lChainPitch);
+    this.chainLength = chordalChainLength(
+      lDrivetrain,
+      lChainPitch,
+      nChainringWear,
+      nCogWear,
+    );
     this.chainLengthToN = chainLengthToN(lChainPitch * nChainWear);
     this.chainLengthRest = chainLengthRest(lChainPitch * nChainWear);
     this.chainringRadius = sprocketRadius(lChainPitch);
     this.sprocketRadius = sprocketRadius(lChainPitch);
     this.chainRestLinks = chainRestLinks(lChainPitch * nChainWear);
-    this.drivetrainLength = drivetrainLength(
-      lBBWidth,
-      lDropoutsDistance,
-      lDropoutsThickness,
-      lChainstayBBOffset,
-    );
   }
 }
 
