@@ -20,7 +20,7 @@ const proseTemplate = ss => `
 // as cog, ring matrix yaml dump
 const cogRingMatrix = fContent => obj => {
   const returnObj = obj
-    .map(o => ({[o.nChainring]: {[o.nCog]: fContent(o)}}))
+    .map(o => ({[o.nRing]: {[o.nCog]: fContent(o)}}))
     .reduce((os, o) => {
       // join inner and outer nested object elements
       const k = Object.keys(o).join();
@@ -62,7 +62,7 @@ class Format {
 
     // takes a single cog/chainring results object and returns string
     this.chainLengthProse = obj => proseTemplate([
-      obj.nChainring,
+      obj.nRing,
       obj.nCog,
       this.show.cm(obj.lChain),
       obj.nChain,

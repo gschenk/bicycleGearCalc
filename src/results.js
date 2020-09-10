@@ -2,9 +2,9 @@
 // and provides methods to return this data in useful formats
 //
 class Results {
-  constructor(nChainrings, nCogs, lDrivetrain) {
+  constructor(nRings, nCogs, lDrivetrain) {
     // arrays with chainrings and cog teeth counts
-    this.nChainrings = nChainrings;
+    this.nRings = nRings;
     this.nCogs = nCogs;
 
     // distance between centres of chainring and cog
@@ -15,12 +15,12 @@ class Results {
   }
 
   set addGearSet(objs) {
-    // input objects need to have nChainring and nCog properties
+    // input objects need to have nRing and nCog properties
     this.gearSets = [
       ...this.gearSets,
       ...objs.filter(o => {
         const keys = Object.keys(o);
-        return keys.includes('nChainring') && keys.includes('nCog');
+        return keys.includes('nRing') && keys.includes('nCog');
       }),
     ];
   }
