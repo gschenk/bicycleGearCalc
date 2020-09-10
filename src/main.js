@@ -82,7 +82,9 @@ const calc = new Calc(
 const chainProps = chain.chainProperties(calc);
 
 // calculate chain length
-results.chainSet = inData.chainring.teeth
+// chainring/cog teeth are lists, results are to be calcluated for each combination
+// each cobination is one gearSets
+results.gearSets= inData.chainring.teeth
   .map(m => inData.cog.teeth.map(n => chainProps(m, n)))
   .flat();
 
@@ -93,11 +95,11 @@ out.prose(
 );
 
 out.prose(
-  results.chainSet
+  results.gearSets
     .map(o => format.chainLengthProse(o))
     .reduce((as, a) => `${as} ${a}`),
 );
 
-out.links(format.linksMatrix(results.chainSet));
+out.links(format.linksMatrix(results.gearSets));
 
-out.slack(format.slackMatrix(results.chainSet));
+out.slack(format.slackMatrix(results.gearSets));

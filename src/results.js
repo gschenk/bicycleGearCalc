@@ -10,14 +10,14 @@ class Results {
     // distance between centres of chainring and cog
     this.lDrivetrain = lDrivetrain;
 
-    // the chainsets
-    this.chainSets = [];
+    // the gearSets
+    this.gearSets = [];
   }
 
-  set addChainSet(objs) {
+  set addGearSet(objs) {
     // input objects need to have nChainring and nCog properties
-    this.chainSets = [
-      ...this.chainsets,
+    this.gearSets = [
+      ...this.gearSets,
       ...objs.filter(o => {
         const keys = Object.keys(o);
         return keys.includes('nChainring') && keys.includes('nCog');
