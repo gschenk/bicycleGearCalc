@@ -22,3 +22,5 @@ tyre:
     depression: 0.15
 drivetrain:
     length: 425 mm
+misc:
+    cadence: 1 Hz     

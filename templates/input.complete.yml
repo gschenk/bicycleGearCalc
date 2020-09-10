@@ -24,3 +24,5 @@ tyre:
     bead diametre: length
     width: length
     depression: number
+misc:
+    cadence: frequency
