@@ -82,7 +82,7 @@ const chainLengthRest = lPitch => lChain => 2 * lPitch - (lChain % (2 * lPitch))
 // rest in units of links
 const chainRestLinks = lPitch => lRest => lRest !== 0 ? lRest / lPitch : 0;
 
-class Calc {
+class Drivetrain {
   constructor(
     lDrivetrain,
     lChainPitch,
@@ -105,4 +105,4 @@ class Calc {
   }
 }
 
-module.exports = Calc;
+module.exports = Drivetrain;
