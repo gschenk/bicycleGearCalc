@@ -13,6 +13,7 @@ const defaultCfg = {
   prose: true,
   links: false,
   slack: false,
+  speed: false,
 };
 
 // argument flags are mapped to these
@@ -25,6 +26,7 @@ const configForArg = arg => ({
   prose: {prose: true},
   links: {links: true, prose: false},
   slack: {slack: true, prose: false},
+  speed: {speed: true, prose: false},
 });
 
 // dictionary of accepted argument patterns
@@ -41,6 +43,7 @@ const knownCliArguments = {
   '--prose': 'prose', // output results in full sentences
   '--links': 'links', // output of yaml formated number of links in chain
   '--slack': 'slack', // output of yaml formated slack in chain
+  '--speed': 'speed', // output of yaml formated speed in chain
 };
 
 module.exports = {
