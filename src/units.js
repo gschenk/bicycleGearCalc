@@ -87,6 +87,26 @@ const angle = {
 };
 deepFreeze(angle);
 
+const frequency = {
+  // keys: unit symbol
+  // values: factor to convert to units of 1 Hz
+  values: {
+    Hz: 1,
+    kHz: 1e3,
+    MHz: 1e6,
+    GHz: 1e9,
+    rpm: 1 / 60,
+    rph: 1 / 3600,
+  },
+  translations: {
+    's^-1': 'Hz',
+    '/s': 'Hz',
+    '1/s': 'Hz',
+    rps: 'Hz',
+    '1/min': 'rpm',
+  },
+};
+
 const number = {
   values: {},
   translations: {},
@@ -103,5 +123,5 @@ deepFreeze(text);
 const ambiguous = ['Mi', 'Oz', 'gr', 'mi', 'M'];
 
 module.exports = {
-  length, mass, force, angle, ambiguous,
+  length, mass, force, angle, frequency, ambiguous,
 };
