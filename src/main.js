@@ -6,7 +6,7 @@ const read = require('./read');
 const Input = require('./input');
 const Output = require('./output');
 const Format = require('./format');
-const Calc = require('./calc');
+const Drivetrain = require('./drivetrain');
 const chain = require('./chain');
 const Results = require('./results');
 
@@ -71,7 +71,7 @@ const results = new Results(inData.chainring.teeth, inData.cog.teeth, inData.dri
 // calculations
 // new calc object, created with some closures on
 // some constant values
-const calc = new Calc(
+const drivetrain = new Drivetrain(
   inData.drivetrain.length,
   inData.chain.pitch,
   inData.chain.wear,
@@ -79,7 +79,7 @@ const calc = new Calc(
   inData.cog.wear,
 );
 
-const chainProps = chain.chainProperties(calc);
+const chainProps = chain.chainProperties(drivetrain);
 
 // calculate chain length
 // chainring/cog teeth are lists, results are to be calcluated for each combination
