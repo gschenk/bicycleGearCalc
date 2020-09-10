@@ -11,14 +11,14 @@ const sprocketRadius = lPitch => nTeeth => polygonRadius(lPitch)(nTeeth);
 
 // returns the angle [rad] at which the chain joins the chainring
 // chainJoinAngle :: Float -> Float -> Float -> Float
-const chainJoinAngle = (rChainring, rCog, lDrivetrain) => Math.asin(
-  (rChainring - rCog) / lDrivetrain,
+const chainJoinAngle = (rRing, rCog, lDrivetrain) => Math.asin(
+  (rRing - rCog) / lDrivetrain,
 );
 
 // returns the straight line between points of cog separation and chainring join
 // upFreeChainLength :: Float -> Float -> Float -> Float
-const upFreeChainLength = (rChainring, rCog, lDrivetrain) => Math.sqrt(
-  lDrivetrain ** 2 - (rChainring - rCog) ** 2,
+const upFreeChainLength = (rRing, rCog, lDrivetrain) => Math.sqrt(
+  lDrivetrain ** 2 - (rRing - rCog) ** 2,
 );
 
 // returns evolvement of a cog/chainring by the chain
@@ -32,45 +32,45 @@ const evolvedFraction = aSep => 0.5 + aSep / Math.PI;
 
 // returns the length of chain for a perfectly taut chain wit no errors
 // naiveChainLength :: Float -> Integer -> Integer -> Float -> Float
-const naiveChainLength = (lDrivetrain, lPitch) => (nChainring, nCog) => {
-  const rChainring = sprocketRadius(lPitch)(nChainring);
+const naiveChainLength = (lDrivetrain, lPitch) => (nRing, nCog) => {
+  const rRing = sprocketRadius(lPitch)(nRing);
   const rCog = sprocketRadius(lPitch)(nCog);
 
   // On the upper chainline the chain joins the chainring at angle aJoin
   // from the vertical. It leaves the cog at angle aSep.
-  const aJoin = chainJoinAngle(rChainring, rCog, lDrivetrain);
+  const aJoin = chainJoinAngle(rRing, rCog, lDrivetrain);
   const aSep = -aJoin;
 
-  const lFreeChain = 2 * upFreeChainLength(rChainring, rCog, lDrivetrain);
-  const lChainring = chainEvolvement(rChainring, aJoin);
+  const lFreeChain = 2 * upFreeChainLength(rRing, rCog, lDrivetrain);
+  const lRing = chainEvolvement(rRing, aJoin);
   const lCog = chainEvolvement(rCog, aSep);
 
   // assuming: mirror symetry up/down
-  return lChainring + lCog + lFreeChain;
+  return lRing + lCog + lFreeChain;
 };
 
 const chordalChainLength = (
   lDrivetrain,
   lPitch,
-  nChainringWear,
+  nRingWear,
   nCogWear,
 ) => (
-  nChainring,
+  nRing,
   nCog,
 ) => {
   // the radii are required for chain geometry
-  const rChainring = sprocketRadius(lPitch)(nChainring) * nChainringWear;
+  const rRing = sprocketRadius(lPitch)(nRing) * nRingWear;
   const rCog = sprocketRadius(lPitch)(nCog) * nCogWear;
 
-  const aJoin = chainJoinAngle(rChainring, rCog, lDrivetrain);
+  const aJoin = chainJoinAngle(rRing, rCog, lDrivetrain);
   const aSep = -aJoin;
 
-  const lFreeChain = 2 * upFreeChainLength(rChainring, rCog, lDrivetrain);
-  const lChainring = evolvedFraction(aJoin) * nChainring * lPitch * nChainringWear;
+  const lFreeChain = 2 * upFreeChainLength(rRing, rCog, lDrivetrain);
+  const lRing = evolvedFraction(aJoin) * nRing * lPitch * nRingWear;
   const lCog = evolvedFraction(aSep) * nCog * lPitch * nCogWear;
 
   // assuming: mirror symetry up/down
-  return lChainring + lCog + lFreeChain;
+  return lRing + lCog + lFreeChain;
 };
 
 // even number of links in a chain that is greater than a given length
@@ -87,14 +87,14 @@ class Drivetrain {
     lDrivetrain,
     lChainPitch,
     nChainWear,
-    nChainringWear,
+    nRingWear,
     nCogWear,
   ) {
     this.naiveChainLength = naiveChainLength(lDrivetrain, lChainPitch);
     this.chainLength = chordalChainLength(
       lDrivetrain,
       lChainPitch,
-      nChainringWear,
+      nRingWear,
       nCogWear,
     );
     this.chainLengthToN = chainLengthToN(lChainPitch * nChainWear);
