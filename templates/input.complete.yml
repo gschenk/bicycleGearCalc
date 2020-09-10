@@ -23,3 +23,4 @@ dropouts:
 tyre:
     bead diametre: length
     width: length
+    depression: number
