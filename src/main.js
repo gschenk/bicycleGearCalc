@@ -8,6 +8,7 @@ const Output = require('./output');
 const Format = require('./format');
 const Drivetrain = require('./drivetrain');
 const chain = require('./chain');
+const Speed = require('./speed');
 const Results = require('./results');
 
 // putting configuration object together
@@ -103,3 +104,11 @@ out.prose(
 out.links(format.linksMatrix(results.gearSets));
 
 out.slack(format.slackMatrix(results.gearSets));
+
+const speed = new Speed(
+  inData.tyre['bead diametre'],
+  inData.tyre.width,
+  inData.tyre.depression,
+);
+
+console.log(speed.speed(inData.misc.cadence)(42,18));
