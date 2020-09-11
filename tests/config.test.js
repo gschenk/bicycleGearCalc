@@ -40,7 +40,6 @@ describe('config.js config() returns correct objects', () => {
   test.each([[[], 0], [['-'], 0], [['-', '-v', '-h'], 7], [['sldjf'], 22]])(
     'For CLI arguments %s config() returns correct error state %i',
     (as, b) => {
-      console.log(as, b, config(as).err);
       expect(config(['foo', 'bar', ...as]).err).toBe(b);
     },
   );
