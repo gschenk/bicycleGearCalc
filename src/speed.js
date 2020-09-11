@@ -4,7 +4,7 @@
 const rEff = (lBead, lTyre, nDep) => lBead / 2 + lTyre * (1 - nDep);
 
 // speed for a given cadence
-const fSpeed = r => c => (nCog, nRing) => nCog !== 0
+const fSpeed = r => c => (nRing, nCog) => nCog !== 0
   ? 2 * Math.PI * r * c * (nRing / nCog)
   : NaN;
 
@@ -21,6 +21,12 @@ class Speed {
   ) {
     const rWheel = rEff(lBead, lTyre, nDepression);
     this.speed = fSpeed(rWheel);
+    this.speedSet = nCadence => (nRing, nCog) => ({
+      nRing,
+      nCog,
+      cadence: nCadence,
+      speed: fSpeed(rWheel)(nCadence)(nRing, nCog),
+    });
     this.gearInches = fEquivWheel(rWheel);
   }
 }

@@ -48,6 +48,10 @@ class Format {
       mm: showInUnits(units.length.values)('mm')(1),
       cm: showInUnits(units.length.values)('cm')(1),
       deg: showInUnits(units.angle.values)('deg')(1),
+      'm/s': showInUnits(units.velocity.values)('m/s')(2),
+      'km/h': showInUnits(units.velocity.values)('km/h')(1),
+      Hz: showInUnits(units.frequency.values)('Hz')(1),
+      rpm: showInUnits(units.frequency.values)('rpm')(0),
     };
 
     // returns a yaml formated string of a matrix (cog, chainring)
@@ -58,6 +62,12 @@ class Format {
     // with number of links in chain - slack links as values
     this.linksMatrix = cogRingMatrix(
       o => `${o.nChain} - ${this.show.fix2(o.lRestLinks)}`,
+    );
+
+    // returns a yaml formated string of a matrix (cog, chainring)
+    // with excess chain length remaining for slack as values
+    this.speedMatrix = cogRingMatrix(
+      o => `${this.show['km/h'](o.speed)} at ${this.show.rpm(o.cadence)}`,
     );
 
     // takes a single cog/chainring results object and returns string
