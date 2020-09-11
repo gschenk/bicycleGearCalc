@@ -14,6 +14,7 @@ class Output {
     this.prose = print(config.prose);
     this.slack = print(config.slack);
     this.links = print(config.links);
+    this.speed = print(config.speed);
   }
 }
 

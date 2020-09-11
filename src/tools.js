@@ -41,6 +41,8 @@ const tools = {
     return uniqeMatch ? cases[key] : defCase;
   },
 
+  map2d: nR => nC => f => nR.flatMap(m => nC.map(n => f(m, n))),
+
   reduceSort,
 
   zipWith,
