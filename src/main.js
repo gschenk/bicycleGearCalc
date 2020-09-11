@@ -70,7 +70,7 @@ if (config.help) {
 const results = new Results(inData.chainring.teeth, inData.cog.teeth, inData.drivetrain?.length);
 
 // calculations
-// new calc object, created with some closures on
+// new calc objects, created with some closures on
 // some constant values
 const drivetrain = new Drivetrain(
   inData.drivetrain.length,
@@ -80,17 +80,26 @@ const drivetrain = new Drivetrain(
   inData.cog.wear,
 );
 
+const speed = new Speed(
+  inData.tyre['bead diametre'],
+  inData.tyre.width,
+  inData.tyre.depression,
+);
 const chainProps = chain.chainProperties(drivetrain);
+
+
+// closure on function to map ring and cog teeth to function
+const mapRingCog = tools.map2d(inData.chainring.teeth)(inData.cog.teeth)
 
 // calculate chain length
 // chainring/cog teeth are lists, results are to be calcluated for each combination
 // each cobination is one gearSets
-results.gearSets= inData.chainring.teeth
-  .map(m => inData.cog.teeth.map(n => chainProps(m, n)))
-  .flat();
+results.gearSets = mapRingCog(chainProps);
+
+// calculate speeds
+out.speed(mapRingCog(speed.speed))
 
 // output
-
 out.prose(
   `The bike's drivetrain is ${format.show.mm(inData.drivetrain.length)} long.`,
 );
@@ -105,10 +114,4 @@ out.links(format.linksMatrix(results.gearSets));
 
 out.slack(format.slackMatrix(results.gearSets));
 
-const speed = new Speed(
-  inData.tyre['bead diametre'],
-  inData.tyre.width,
-  inData.tyre.depression,
-);
 
-console.log(speed.speed(inData.misc.cadence)(42,18));
