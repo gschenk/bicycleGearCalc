@@ -77,7 +77,9 @@ class Input {
         const isArray = /array/.test(token);
         const isNumber = /number/.test(token);
 
-        const rawValue = innerData[l] ? innerData[l] : defaults[k][l];
+        const rawValue = (innerData[l] || innerData[l] === 0)
+          ? innerData[l]
+          : defaults[k][l];
         const value = isUnit
           ? convert(token)(rawValue)
           : isArray
