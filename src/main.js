@@ -97,7 +97,7 @@ const mapRingCog = tools.map2d(inData.chainring.teeth)(inData.cog.teeth)
 results.gearSets = mapRingCog(chainProps);
 
 // calculate speeds
-out.speed(mapRingCog(speed.speed))
+results.speedSets = mapRingCog(speed.speed(inData.misc.cadence));
 
 // output
 out.prose(
@@ -114,4 +114,4 @@ out.links(format.linksMatrix(results.gearSets));
 
 out.slack(format.slackMatrix(results.gearSets));
 
-
+out.speed(results.speedSets);
