@@ -19,6 +19,7 @@ const length = {
     thou: 0.254e-3,
     s: constants.c, // light seconds
     NM: 1852, // mile
+    mi: 1.609344, // international mile
   },
   translations: {
     μm: 'um',
@@ -87,6 +88,45 @@ const angle = {
 };
 deepFreeze(angle);
 
+const frequency = {
+  // keys: unit symbol
+  // values: factor to convert to units of 1 Hz
+  values: {
+    Hz: 1,
+    kHz: 1e3,
+    MHz: 1e6,
+    GHz: 1e9,
+    rpm: 1 / 60,
+    rph: 1 / 3600,
+  },
+  translations: {
+    's^-1': 'Hz',
+    '/s': 'Hz',
+    '1/s': 'Hz',
+    rps: 'Hz',
+    '1/min': 'rpm',
+  },
+};
+
+const velocity = {
+  values: {
+    'm/s': 1,
+    c: 299792458,
+    'km/h': 10 / 36,
+    kt: length.values.NM / 3600,
+    mph: length.values.mi / 3600,
+  },
+  translations: {
+    mps: 'm/s',
+    kph: 'km/h',
+    KPH: 'km/h',
+    'NM/h': 'kt',
+    MPH: 'mph',
+    'mi/h': 'mph',
+    'nmi/h': 'kt',
+  },
+};
+
 const number = {
   values: {},
   translations: {},
@@ -103,5 +143,5 @@ deepFreeze(text);
 const ambiguous = ['Mi', 'Oz', 'gr', 'mi', 'M'];
 
 module.exports = {
-  length, mass, force, angle, ambiguous,
+  length, mass, force, angle, frequency, velocity, ambiguous,
 };
